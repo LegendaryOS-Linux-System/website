@@ -1,1 +1,203 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LegendaryOS – pixel-artowa dystrybucja Linuksa na bazie Debian Trixie. Feniks w 8-bitowym stylu!">
+    <title>LegendaryOS • PIXEL FENIX EDITION</title>
 
+    <!-- Pixel Art Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="images/LegendaryOS.png" type="image/png">
+</head>
+<body>
+    <!-- Navbar – pixel style -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="images/LegendaryOS.png" alt="LegendaryOS" class="nav-logo pixel-img">
+                <span class="logo-text">LEGENDARYOS</span>
+            </div>
+
+            <div class="nav-links" id="nav-links">
+                <a href="#home" class="nav-item pixel-btn">START</a>
+                <a href="#about" class="nav-item pixel-btn">O SYSTEMIE</a>
+                <a href="#features" class="nav-item pixel-btn">FUNKCJE</a>
+                <a href="#download" class="nav-item pixel-btn">POBIERZ</a>
+                <a href="#community" class="nav-item pixel-btn">KOMUNITA</a>
+                <a href="https://github.com/LegendaryOS" target="_blank" class="nav-item pixel-btn">GITHUB</a>
+            </div>
+
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO – pełny pixel art vibe -->
+    <header id="home" class="hero">
+        <div class="hero-content">
+            <img src="images/LegendaryOS.png" alt="LegendaryOS Logo" class="hero-logo pixel-img">
+            <h1 class="hero-title">LEGENDARY<span class="glitch">OS</span></h1>
+            <p class="hero-subtitle">8-BIT FENIX • DEBIAN TRIXIE • STABILNY JAK PIXEL</p>
+
+            <div class="hero-buttons">
+                <a href="#download" class="btn btn-primary pixel-btn-big">POBIERZ ISO</a>
+                <a href="#about" class="btn btn-secondary pixel-btn-big">WIĘCEJ INFO</a>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat pixel-box">
+                    <span class="stat-number">DEBIAN</span>
+                    <span class="stat-label">TRIXIE</span>
+                </div>
+                <div class="stat pixel-box">
+                    <span class="stat-number">2026</span>
+                    <span class="stat-label">1.0 RELEASE</span>
+                </div>
+                <div class="stat pixel-box">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">RETRO STABILNOŚĆ</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pixel stars background -->
+        <div class="stars" id="stars"></div>
+    </header>
+
+    <!-- About -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title pixel-title">CO TO ZA FENIX?</h2>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p class="pixel-text">LegendaryOS to <strong>pixel-artowa dystrybucja Linuksa</strong> zbudowana na stabilnym Debianie Trixie. Klasyczna stabilność + 8-bitowy design = legenda w każdym pikselu.</p>
+                    <p class="pixel-text">Nie musisz być pro – wystarczy jedno uruchomienie i już czujesz się jak w starej grze, tylko że tym razem system działa bez crashy.</p>
+                    <ul class="about-list pixel-list">
+                        <li>✅ Bazuje na Debian Trixie (stabilna)</li>
+                        <li>✅ Pixel-art desktop z feniksem</li>
+                        <li>✅ Lekki i szybki jak 8-bitowy boss</li>
+                        <li>✅ Pełne wsparcie sprzętu 2026</li>
+                        <li>✅ Zero bloatware – czysta retro moc</li>
+                    </ul>
+                </div>
+                <div class="about-image-placeholder pixel-frame">
+                    <img src="images/LegendaryOS.png" alt="Feniks" class="phoenix-small pixel-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="section features-section">
+        <div class="container">
+            <h2 class="section-title pixel-title">DLACZEGO LEGENDARYOS?</h2>
+            <div class="features-grid">
+                <div class="feature-card pixel-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>STABILNOŚĆ LEVEL 99</h3>
+                    <p>Oparty na Debian Trixie. Aktualizacje tylko gdy naprawdę trzeba. Żadnych crashy w środku gry.</p>
+                </div>
+                <div class="feature-card pixel-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>8-BIT WYDAJNOŚĆ</h3>
+                    <p>Działa na starym sprzęcie jak na nowym. Minimalne zużycie RAM – feniks nie potrzebuje dużo mocy.</p>
+                </div>
+                <div class="feature-card pixel-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>PIXEL-ART DESIGN</h3>
+                    <p>Twój pulpit wygląda jak z klasycznej gry. Feniks, gwiazdy, neonowe kolory – czysty retro vibe.</p>
+                </div>
+                <div class="feature-card pixel-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>ŁATWY APT + LEGENDARY MGR</h3>
+                    <p>Instalujesz pakiety jak w 1998 roku, tylko szybciej i ładniej.</p>
+                </div>
+                <div class="feature-card pixel-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>BEZPIECZEŃSTWO MAX</h3>
+                    <p>AppArmor, firewall i automatyczne update’y bezpieczeństwa w pakiecie.</p>
+                </div>
+                <div class="feature-card pixel-card">
+                    <div class="feature-icon">👾</div>
+                    <h3>SPOŁECZNOŚĆ FENIXÓW</h3>
+                    <p>Dołącz do ekipy, która kocha retro i Linuksa. Razem jesteśmy nieśmiertelni.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download -->
+    <section id="download" class="section download-section">
+        <div class="container">
+            <h2 class="section-title pixel-title">WYBIERZ SWOJĄ WERSJĘ</h2>
+            <p class="download-subtitle pixel-text">Wszystkie ISO oparte na Debian Trixie • 64-bit</p>
+
+            <div class="download-cards">
+                <div class="download-card pixel-card" onclick="downloadISO('standard')">
+                    <h3>STANDARD</h3>
+                    <p class="version">GNOME • 2.8 GB</p>
+                    <button class="btn btn-primary pixel-btn-big">POBIERZ</button>
+                    <small>NAJLEPSZY START</small>
+                </div>
+
+                <div class="download-card pixel-card" onclick="downloadISO('minimal')">
+                    <h3>MINIMAL</h3>
+                    <p class="version">CLI • 1.1 GB</p>
+                    <button class="btn btn-secondary pixel-btn-big">POBIERZ</button>
+                    <small>DLA SERWERÓW I RETRO PC</small>
+                </div>
+
+                <div class="download-card pixel-card" onclick="downloadISO('kde')">
+                    <h3>KDE PLASMA</h3>
+                    <p class="version">Plasma 6 • 3.2 GB</p>
+                    <button class="btn btn-secondary pixel-btn-big">POBIERZ</button>
+                    <small>PEŁNA KUSTOMIZACJA</small>
+                </div>
+            </div>
+
+            <p class="checksum pixel-text">SHA256 na <a href="#" onclick="showChecksum()">GITHUB</a> – sprawdź zanim uruchomisz!</p>
+        </div>
+    </section>
+
+    <!-- Community -->
+    <section id="community" class="section">
+        <div class="container">
+            <h2 class="section-title pixel-title">DOŁĄCZ DO PIXEL FENIXÓW</h2>
+            <div class="community-grid">
+                <a href="https://discord.gg/legendaryos" target="_blank" class="community-link pixel-btn">💬 DISCORD</a>
+                <a href="https://github.com/LegendaryOS" target="_blank" class="community-link pixel-btn">🐙 GITHUB</a>
+                <a href="https://forum.legendaryos.org" target="_blank" class="community-link pixel-btn">📜 FORUM</a>
+                <a href="https://matrix.to/#/#legendaryos:matrix.org" target="_blank" class="community-link pixel-btn">🟪 MATRIX</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="images/LegendaryOS.png" alt="LegendaryOS" class="footer-logo-img pixel-img">
+                    <p>© 2026 LEGENDARYOS TEAM<br>BAZOWANE NA DEBIAN TRIXIE • 8-BIT FOREVER</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#">DOCS</a>
+                    <a href="#">BUG REPORT</a>
+                    <a href="#">REGULAMIN</a>
+                </div>
+                <div class="footer-social pixel-text">
+                    MADE WITH 🔥 &amp; PIXELS BY FENIXAMI DLA FENIXÓW
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
