@@ -1,0 +1,321 @@
+/* ── CHANGELOG PAGE LAYOUT ── */
+
+.cl-page {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 2rem 6rem;
+    gap: 4rem;
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.cl-sidebar {
+    position: relative;
+}
+
+.cl-sidebar-inner {
+    position: sticky;
+    top: 90px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.cl-sidebar-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--neon-purple);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.cl-nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cl-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    gap: 0.5rem;
+}
+
+.cl-nav-link:hover,
+.cl-nav-link.active {
+    border-color: var(--border-glow);
+    background: rgba(224, 64, 251, 0.05);
+}
+
+.cl-nav-link.active {
+    border-left: 2px solid var(--neon-pink);
+}
+
+.cl-nav-version {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.5rem;
+    color: var(--text-primary);
+}
+
+.cl-nav-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.48rem;
+    letter-spacing: 1px;
+    padding: 2px 6px;
+    border: 1px solid;
+}
+
+.cl-sidebar-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.cl-ext-link {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+}
+
+.cl-ext-link:hover {
+    color: var(--neon-pink);
+}
+
+/* ── MAIN CONTENT ── */
+.cl-content {
+    min-width: 0;
+}
+
+.cl-page-header {
+    margin-bottom: 4rem;
+}
+
+.cl-page-header .section-title {
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    margin: 0.8rem 0 1rem;
+}
+
+.cl-page-desc {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    line-height: 1.7;
+}
+
+/* ── RELEASE ARTICLE ── */
+.cl-release {
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+}
+
+.cl-release::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple), var(--neon-blue));
+}
+
+.cl-release:hover {
+    border-color: var(--border-glow);
+}
+
+.cl-release-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(124, 77, 255, 0.03);
+}
+
+.cl-release-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.cl-version {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1rem;
+    color: var(--neon-pink);
+    text-shadow: 0 0 10px var(--neon-pink);
+}
+
+.cl-codename {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+}
+
+.cl-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    border: 1px solid;
+}
+
+.badge-stable { color: #69ff47; border-color: #69ff47; }
+.badge-beta   { color: #ffd740; border-color: #ffd740; }
+.badge-alpha  { color: var(--neon-blue); border-color: var(--neon-blue); }
+
+.cl-date {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+}
+
+.cl-summary {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.cl-body {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.cl-changes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+}
+
+/* ── CATEGORY BLOCK ── */
+.cl-category {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.cl-cat-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.52rem;
+    color: var(--neon-purple);
+    letter-spacing: 1px;
+    line-height: 1.8;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.cl-cat-icon {
+    color: var(--neon-pink);
+    font-size: 0.6rem;
+}
+
+.cl-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.cl-items li {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    padding-left: 1.2rem;
+    position: relative;
+}
+
+.cl-items li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--neon-purple);
+    font-size: 0.7rem;
+}
+
+/* ── KNOWN BUGS ── */
+.cl-bugs {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 1.5rem;
+}
+
+.cl-bugs-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.52rem;
+    color: #ffd740;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+    line-height: 1.8;
+}
+
+.cl-bugs .cl-items li::before {
+    color: #ffd740;
+}
+
+.cl-bugs-empty {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 1.2rem;
+}
+
+.cl-no-bugs {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    color: #69ff47;
+    letter-spacing: 1px;
+}
+
+.cl-no-bugs::before {
+    content: '✔  ';
+}
+
+/* ── BADGE COLORS IN NAV ── */
+.cl-nav-badge.badge-stable { color: #69ff47; border-color: #69ff47; }
+.cl-nav-badge.badge-beta   { color: #ffd740; border-color: #ffd740; }
+.cl-nav-badge.badge-alpha  { color: var(--neon-blue); border-color: var(--neon-blue); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 800px) {
+    .cl-page {
+        grid-template-columns: 1fr;
+        padding-top: 90px;
+    }
+    .cl-sidebar-inner {
+        position: static;
+    }
+    .cl-changes {
+        grid-template-columns: 1fr;
+    }
+    .cl-release-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
