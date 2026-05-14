@@ -1,73 +1,217 @@
-// script.js – PIXEL EDITION
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('%c🕹️ LEGENDARYOS PIXEL ART MODE ACTIVATED 🕹️', 'color:#00f0ff; font-size:22px; font-family:monospace;');
+'use strict';
 
-    // Hamburger
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('nav-links');
+/* STAR FIELD */
+(function initStars() {
+    const canvas = document.getElementById('stars-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W, H, stars = [];
+    const STAR_COUNT = 180;
+    const COLORS = ['#e040fb', '#7c4dff', '#40c4ff', '#aa00ff', '#ffffff'];
 
-    hamburger.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-    });
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
 
-    // Smooth scroll
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-        link.addEventListener('click', e => {
-            if (link.getAttribute('href') === '#') return;
-            e.preventDefault();
-            document.querySelector(link.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-            if (navLinks.classList.contains('active')) navLinks.classList.remove('active');
+    function createStar() {
+        return {
+            x: Math.random() * W,
+ y: Math.random() * H,
+ r: Math.random() * 1.5 + 0.3,
+ color: COLORS[Math.floor(Math.random() * COLORS.length)],
+ alpha: Math.random(),
+ dAlpha: (Math.random() * 0.008 + 0.002) * (Math.random() < 0.5 ? 1 : -1),
+        };
+    }
+
+    function initStarField() { stars = Array.from({ length: STAR_COUNT }, createStar); }
+
+    function draw() {
+        ctx.clearRect(0, 0, W, H);
+        stars.forEach(s => {
+            s.alpha += s.dAlpha;
+            if (s.alpha <= 0 || s.alpha >= 1) s.dAlpha *= -1;
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, Math.min(1, s.alpha)) * 0.7;
+            ctx.fillStyle = s.color;
+            ctx.shadowColor = s.color;
+            ctx.shadowBlur = 4;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        });
+        requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', () => { resize(); initStarField(); });
+    resize();
+    initStarField();
+    draw();
+})();
+
+
+/* SCROLL REVEAL */
+(function initReveal() {
+    const elements = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const siblings = Array.from(entry.target.parentElement.querySelectorAll('.reveal:not(.visible)'));
+                const delay = siblings.indexOf(entry.target) * 80;
+                setTimeout(() => entry.target.classList.add('visible'), delay);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    elements.forEach(el => observer.observe(el));
+})();
+
+
+/* INSTALL TABS */
+(function initTabs() {
+    const tabMap = { iso: 'tab-iso', vm: 'tab-vm', upgrade: 'tab-upgrade', custom: 'tab-custom' };
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            const content = document.getElementById(tabMap[btn.dataset.tab]);
+            if (content) content.classList.add('active');
         });
     });
+})();
 
-    // Pixel stars
-    function spawnPixels() {
-        const container = document.getElementById('stars');
-        for (let i = 0; i < 180; i++) {
-            const pixel = document.createElement('div');
-            const size = Math.random() * 4 + 2;
-            pixel.style.cssText = `
-            position:absolute;
-            width:${size}px;
-            height:${size}px;
-            background:${Math.random() > 0.5 ? '#00f0ff' : '#c026d3'};
-            left:${Math.random()*100}%;
-            top:${Math.random()*100}%;
-            opacity:${Math.random()};
-            box-shadow:0 0 8px currentColor;
-            animation:starTwinkle ${2 + Math.random()*4}s infinite;
-            `;
-            container.appendChild(pixel);
-        }
+
+/* COPY BUTTONS */
+(function initCopyButtons() {
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const block = btn.closest('.code-block');
+            if (!block) return;
+            const raw = block.innerText.replace(/^KOPIUJ\n?/, '').trim();
+            navigator.clipboard.writeText(raw).then(() => {
+                const original = btn.textContent;
+                btn.textContent = 'SKOPIOWANO';
+                btn.style.color = '#69ff47';
+                btn.style.borderColor = '#69ff47';
+                setTimeout(() => {
+                    btn.textContent = original;
+                    btn.style.color = '';
+                    btn.style.borderColor = '';
+                }, 2000);
+            }).catch(() => {
+                btn.textContent = 'BLAD';
+                setTimeout(() => { btn.textContent = 'KOPIUJ'; }, 2000);
+            });
+        });
+    });
+})();
+
+
+/* FAQ ACCORDION */
+(function initFAQ() {
+    document.querySelectorAll('.faq-question').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const item = btn.closest('.faq-item');
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        });
+    });
+})();
+
+
+/* NAV ACTIVE HIGHLIGHT ON SCROLL */
+(function initNavHighlight() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.id;
+                navLinks.forEach(link => {
+                    link.style.color = '';
+                    link.style.textShadow = '';
+                    if (link.getAttribute('href') === '#' + id) {
+                        link.style.color = 'var(--neon-pink)';
+                        link.style.textShadow = '0 0 10px var(--neon-pink)';
+                    }
+                });
+            }
+        });
+    }, { threshold: 0.4 });
+    sections.forEach(s => observer.observe(s));
+})();
+
+
+/* NAV SHADOW ON SCROLL */
+(function initNavScroll() {
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+        nav.style.boxShadow = window.scrollY > 40
+        ? '0 4px 30px rgba(224,64,251,0.15)'
+        : 'none';
+    }, { passive: true });
+})();
+
+
+/* HERO TITLE GLITCH */
+(function initGlitch() {
+    const title = document.querySelector('.hero-title');
+    if (!title) return;
+    function glitch() {
+        title.style.textShadow = `
+        ${(Math.random()*8-4).toFixed(1)}px 0 #e040fb,
+ ${(Math.random()*-8+4).toFixed(1)}px 0 #40c4ff,
+ 0 0 20px #aa00ff
+ `;
+ setTimeout(() => {
+     title.style.textShadow = '0 0 20px var(--neon-pink), 0 0 40px var(--neon-violet), 4px 4px 0 rgba(170,0,255,0.4)';
+ }, 80);
     }
-    const style = document.createElement('style');
-    style.innerHTML = `@keyframes starTwinkle { 0%,100%{opacity:0.2} 50%{opacity:1} }`;
-    document.head.appendChild(style);
-    spawnPixels();
+    function schedule() {
+        const delay = 3000 + Math.random() * 6000;
+        setTimeout(() => { glitch(); setTimeout(glitch, 100); schedule(); }, delay);
+    }
+    schedule();
+})();
 
-    // Download animation
-    window.downloadISO = function(ver) {
-        const texts = {
-            standard: "🚀 POJĄŻDŻ FENIXEM STANDARD – POBIERANIE ROZPOCZĘTE!",
-            minimal: "⚡ MINIMAL MODE – TYLKO KOD I FENIX!",
-            kde: "🌈 KDE PLASMA – PEŁNY PIXEL CUSTOM!"
-        };
-        const msg = document.createElement('div');
-        msg.style.cssText = `position:fixed;bottom:30px;right:30px;background:#c026d3;color:#000;padding:25px 40px;border:8px solid #00f0ff;font-family:'Press Start 2P';box-shadow:0 0 0 8px #000;font-size:1rem;z-index:9999;`;
-        msg.innerHTML = texts[ver] + `<br><small style="font-size:0.7rem">SHA256 sprawdzone – leci feniks!</small>`;
-        document.body.appendChild(msg);
 
-        setTimeout(() => {
-            msg.style.transition = '0.6s';
-            msg.style.transform = 'translateY(100px)';
-            msg.style.opacity = '0';
-            setTimeout(() => msg.remove(), 600);
-        }, 3800);
-    };
+/* FEATURE CARD RADIAL HOVER */
+(function initCardHover() {
+    document.querySelectorAll('.feature-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+            const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+            card.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(124,77,255,0.08) 0%, var(--bg-card-hover) 60%)`;
+        });
+        card.addEventListener('mouseleave', () => { card.style.background = ''; });
+    });
+})();
 
-    window.showChecksum = () => {
-        alert("✅ SHA256 SUMY NA GITHUB:\n\nlegendaryos-standard.iso\n8f3a9c... (pełna suma w CHECKSUMS.txt)\n\nSprawdź zanim bootujesz!");
-    };
 
-    console.log('✅ Pixel art strona LegendaryOS w pełni załadowana – feniks gotowy do lotu!');
+/* TERMINAL RE-ANIMATE ON SCROLL INTO VIEW */
+(function initTerminalReplay() {
+    const terminal = document.querySelector('.terminal');
+    if (!terminal) return;
+    const lines = terminal.querySelectorAll('.t-line');
+    let played = false;
+    new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && !played) {
+            played = true;
+            lines.forEach(l => { l.style.animation = 'none'; l.style.opacity = '0'; });
+            void terminal.offsetWidth;
+            lines.forEach(l => { l.style.animation = ''; });
+        }
+    }, { threshold: 0.5 }).observe(terminal);
+})();
+
+
+/* KEYBOARD: ? or / scrolls to FAQ */
+document.addEventListener('keydown', e => {
+    if ((e.key === '?' || e.key === '/') && document.activeElement.tagName !== 'INPUT') {
+        e.preventDefault();
+        const faq = document.querySelector('#faq');
+        if (faq) faq.scrollIntoView({ behavior: 'smooth' });
+    }
 });
