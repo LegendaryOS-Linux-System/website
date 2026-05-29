@@ -14,17 +14,21 @@
     function createStar() {
         return {
             x: Math.random() * W,
- y: Math.random() * H,
- r: Math.random() * 1.5 + 0.3,
- color: COLORS[Math.floor(Math.random() * COLORS.length)],
- alpha: Math.random(),
- dAlpha: (Math.random() * 0.008 + 0.002) * (Math.random() < 0.5 ? 1 : -1),
+            y: Math.random() * H,
+            r: Math.random() * 1.5 + 0.3,
+            color: COLORS[Math.floor(Math.random() * COLORS.length)],
+            alpha: Math.random(),
+            dAlpha: (Math.random() * 0.008 + 0.002) * (Math.random() < 0.5 ? 1 : -1),
         };
     }
 
     function initStarField() { stars = Array.from({ length: STAR_COUNT }, createStar); }
 
+    let animEnabled = true;
+    let rafId = null;
+
     function draw() {
+        if (!animEnabled) { ctx.clearRect(0, 0, W, H); return; }
         ctx.clearRect(0, 0, W, H);
         stars.forEach(s => {
             s.alpha += s.dAlpha;
@@ -39,13 +43,20 @@
             ctx.fill();
             ctx.restore();
         });
-        requestAnimationFrame(draw);
+        rafId = requestAnimationFrame(draw);
     }
 
     window.addEventListener('resize', () => { resize(); initStarField(); });
     resize();
     initStarField();
     draw();
+
+    // expose toggle
+    window._starsToggle = function(enabled) {
+        animEnabled = enabled;
+        if (enabled) { if (!rafId) draw(); }
+        else { if (rafId) { cancelAnimationFrame(rafId); rafId = null; } ctx.clearRect(0, 0, W, H); }
+    };
 })();
 
 
@@ -146,10 +157,11 @@
 /* NAV SHADOW ON SCROLL */
 (function initNavScroll() {
     const nav = document.querySelector('nav');
+    if (!nav) return;
     window.addEventListener('scroll', () => {
         nav.style.boxShadow = window.scrollY > 40
-        ? '0 4px 30px rgba(224,64,251,0.15)'
-        : 'none';
+            ? '0 4px 30px rgba(224,64,251,0.15)'
+            : 'none';
     }, { passive: true });
 })();
 
@@ -159,15 +171,17 @@
     const title = document.querySelector('.hero-title');
     if (!title) return;
     function glitch() {
+        if (!window._glitchEnabled) return;
         title.style.textShadow = `
-        ${(Math.random()*8-4).toFixed(1)}px 0 #e040fb,
- ${(Math.random()*-8+4).toFixed(1)}px 0 #40c4ff,
- 0 0 20px #aa00ff
- `;
- setTimeout(() => {
-     title.style.textShadow = '0 0 20px var(--neon-pink), 0 0 40px var(--neon-violet), 4px 4px 0 rgba(170,0,255,0.4)';
- }, 80);
+            ${(Math.random()*8-4).toFixed(1)}px 0 #e040fb,
+            ${(Math.random()*-8+4).toFixed(1)}px 0 #40c4ff,
+            0 0 20px #aa00ff
+        `;
+        setTimeout(() => {
+            title.style.textShadow = '0 0 20px var(--neon-pink), 0 0 40px var(--neon-violet), 4px 4px 0 rgba(170,0,255,0.4)';
+        }, 80);
     }
+    window._glitchEnabled = true;
     function schedule() {
         const delay = 3000 + Math.random() * 6000;
         setTimeout(() => { glitch(); setTimeout(glitch, 100); schedule(); }, delay);
@@ -215,3 +229,51 @@ document.addEventListener('keydown', e => {
         if (faq) faq.scrollIntoView({ behavior: 'smooth' });
     }
 });
+
+
+/* SETTINGS PANEL */
+(function initSettings() {
+    const btn = document.getElementById('settings-btn');
+    const overlay = document.getElementById('settings-overlay');
+    const closeBtn = document.getElementById('settings-close');
+    const animToggle = document.getElementById('anim-toggle');
+    const themeButtons = document.querySelectorAll('.theme-btn');
+
+    if (!btn || !overlay) return;
+
+    function openSettings() {
+        overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    function closeSettings() {
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    btn.addEventListener('click', openSettings);
+    closeBtn && closeBtn.addEventListener('click', closeSettings);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeSettings(); });
+
+    // Escape key
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && overlay.style.display === 'flex') closeSettings();
+    });
+
+    // Animation toggle
+    if (animToggle) {
+        animToggle.addEventListener('change', () => {
+            const enabled = animToggle.checked;
+            window._glitchEnabled = enabled;
+            if (window._starsToggle) window._starsToggle(enabled);
+        });
+    }
+
+    // Theme buttons (cosmetic for now)
+    themeButtons.forEach(tb => {
+        tb.addEventListener('click', () => {
+            if (tb.dataset.theme !== 'default') return; // only default works
+            themeButtons.forEach(b => b.classList.remove('active'));
+            tb.classList.add('active');
+        });
+    });
+})();
