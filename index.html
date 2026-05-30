@@ -28,8 +28,8 @@
   </nav>
 
   <!-- SETTINGS PANEL -->
-  <div id="settings-overlay" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(5,5,8,0.85);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
-    <div id="settings-panel" style="background:var(--bg-card);border:1px solid var(--border-glow);padding:2.5rem;max-width:420px;width:90%;position:relative;box-shadow:0 0 60px rgba(224,64,251,0.2);">
+  <div id="settings-overlay" class="settings-overlay-hidden">
+    <div id="settings-panel">
       <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--neon-pink),var(--neon-purple),var(--neon-blue));"></div>
       <button id="settings-close" style="position:absolute;top:1rem;right:1rem;background:transparent;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;font-family:'Share Tech Mono',monospace;">✕</button>
       <h2 style="font-family:'Press Start 2P',monospace;font-size:0.65rem;color:var(--neon-pink);margin-bottom:2rem;letter-spacing:2px;">SETTINGS</h2>
@@ -86,7 +86,6 @@
   <!-- HERO -->
   <section class="hero" id="home">
     <div class="hero-bg-glow"></div>
-    <p class="hero-eyebrow">LegendaryOS</p>
     <h1 class="hero-title">
       LEGENDARY<span class="hero-title-os">OS</span>
     </h1>
@@ -167,10 +166,10 @@
 
       <!-- ISO TAB -->
       <div class="tab-content active reveal" id="tab-iso">
-        <p class="tab-intro">Wybierz edycj&#281; dopasovan&#261; do siebie. Aktualnie dost&#281;pna jest edycja KDE Plasma 6.</p>
 
         <div class="dl-cards">
 
+          <!-- KDE -->
           <div class="dl-card reveal">
             <div class="dl-card-left">
               <div class="dl-card-de-badge kde">KDE</div>
@@ -179,18 +178,62 @@
             <div class="dl-card-right">
               <div class="dl-card-header">
                 <h3 class="dl-card-title">LegendaryOS <strong>KDE</strong></h3>
-                <span class="dl-badge stable">STABLE</span>
-              </div>
-              <p class="dl-card-desc">Obraz ISO z edycj&#261; KDE Plasma 6 &mdash; nowoczesny, wysoce konfigurowalny interfejs oparty na Qt. Bogata personalizacja, natywna integracja z Wayland i obs&#322;uga Flatpak od razu po instalacji.</p>
-              <div class="dl-meta">
-                <span>x86_64</span>
-                <span>Fedora 44</span>
-                <span>KDE Plasma 6</span>
-                <span>Wayland</span>
               </div>
               <div class="dl-buttons">
-                <a href="https://sourceforge.net/projects/legendaryos/files/kde/latest/" target="_blank" class="btn btn-primary btn-sm">SourceForge</a>
+                <a href="https://sourceforge.net/projects/legendaryos/files/KDE/2026/0.0.1/LegendaryOS-0.0.1-fedora44.x86_64.iso/download" target="_blank" class="btn btn-primary btn-sm">SourceForge</a>
+                <a href="https://drive.google.com/file/d/1qgpslypKlmXtE4NbO7cPHcDf9zmIB1wa/view?usp=sharing" target="_blank" class="btn btn-secondary btn-sm">Google Drive</a>
                 <a href="https://transfer.it" target="_blank" class="btn btn-secondary btn-sm">Transfer.it</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- GNOME -->
+          <div class="dl-card reveal">
+            <div class="dl-card-left">
+              <div class="dl-card-de-badge" style="color:#ff6e40;border-color:#ff6e40;">GNOME</div>
+              <img src="images/environments/gnome.png" alt="GNOME" class="de-screenshot" />
+            </div>
+            <div class="dl-card-right">
+              <div class="dl-card-header">
+                <h3 class="dl-card-title">LegendaryOS <strong>GNOME</strong></h3>
+              </div>
+              <div class="dl-buttons">
+                <a href="#" class="btn btn-primary btn-sm dl-btn-soon">SourceForge</a>
+                <a href="#" class="btn btn-secondary btn-sm dl-btn-soon">Transfer.it</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cosmic -->
+          <div class="dl-card reveal">
+            <div class="dl-card-left">
+              <div class="dl-card-de-badge cosmic">COSMIC</div>
+              <img src="images/environments/cosmic.png" alt="COSMIC DE" class="de-screenshot" />
+            </div>
+            <div class="dl-card-right">
+              <div class="dl-card-header">
+                <h3 class="dl-card-title">LegendaryOS <strong>Cosmic</strong></h3>
+              </div>
+              <div class="dl-buttons">
+                <a href="#" class="btn btn-primary btn-sm dl-btn-soon">SourceForge</a>
+                <a href="#" class="btn btn-secondary btn-sm dl-btn-soon">Transfer.it</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Blue (wkrótce) -->
+          <div class="dl-card reveal">
+            <div class="dl-card-left">
+              <div class="dl-card-de-badge blue">BLUE</div>
+              <img src="images/environments/blue.png" alt="LegendaryOS Blue" class="de-screenshot" />
+            </div>
+            <div class="dl-card-right">
+              <div class="dl-card-header">
+                <h3 class="dl-card-title">LegendaryOS <strong>Blue</strong></h3>
+              </div>
+              <div class="dl-buttons">
+                <a href="#" class="btn btn-primary btn-sm dl-btn-soon">SourceForge</a>
+                <a href="#" class="btn btn-secondary btn-sm dl-btn-soon">Transfer.it</a>
               </div>
             </div>
           </div>
@@ -372,7 +415,7 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <img class="site-logo" src="images/LegendaryOS.png" alt="LegendaryOS" style="width:50px;height:50px;" />
-        <span class="footer-brand-name">LEGENDARY OS</span>
+        <span class="footer-brand-name">LegendaryOS</span>
         <p>Nowoczesna, niezmutowalna dystrybucja Linux.<br>Zbudowana na Fedorze i mechanizmie bootc/ostree.<br>Dla tych, kt&oacute;rzy ceni&#261; niezawodno&#347;&#263; i kontrol&#281;.</p>
       </div>
       <div class="footer-col"><h5>Dokumentacja</h5><ul><li><a href="#install">Instalacja</a></li><li><a href="#immutable">Immutable Linux</a></li><li><a href="#features">Funkcje</a></li><li><a href="#faq">FAQ</a></li></ul></div>
@@ -393,7 +436,7 @@
       </ul></div>
     </div>
     <div class="footer-bottom">
-      <p>2026 LEGENDARY OS PROJECT &mdash; OPARTY NA FEDORZE LINUX</p>
+      <p>2026 LegendaryOS project &mdash; oparty na fedorze linux</p>
       <span class="version-badge">v0.0.1</span>
     </div>
   </footer>
