@@ -1,8 +1,3 @@
-/**
- * LegendaryOS Changelog Renderer
- * Czyta window.LEGENDARY_RELEASES z changelog-data.js i renderuje stronę.
- */
-
 (function () {
     'use strict';
 
