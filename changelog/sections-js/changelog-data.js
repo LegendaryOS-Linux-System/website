@@ -1,16 +1,10 @@
-/**
- * LegendaryOS Changelog Data
- * Dodaj nowe wydania na początku tablicy RELEASES.
- * Strona automatycznie je wyrenderuje.
- */
-
 window.LEGENDARY_RELEASES = [
   {
-    version: "0.1.0",
-    codename: "Phoenix",
-    date: "2026-05-14",
-    status: "alpha",          // "stable" | "beta" | "alpha"
-    summary: "Pierwsze publiczne wydanie alfa LegendaryOS. Podstawowa infrastruktura systemu oparta na Fedorze 44 i mechanizmie bootc.",
+    version: "0.0.1",
+    codename: "",
+    date: "2026-05-29",
+    status: "alpha",
+    summary: "Pierwsze publiczne wydanie alfa LegendaryOS. Podstawowa infrastruktura systemu oparta na Fedorze 44 i mechanizmie bootc/ostree.",
     changes: [
       {
         category: "System",
@@ -19,7 +13,7 @@ window.LEGENDARY_RELEASES = [
           "Immutable root filesystem — partycja / montowana tylko do odczytu",
           "Obsługa atomowych aktualizacji przez obrazy OCI",
           "Wbudowany mechanizm transakcyjnego rollbacku przez GRUB",
-          "Trzy edycje: KDE Plasma 6, Blue (HackerOS DE), Cosmic DE"
+          "Jedna edycja (narazie): KDE Plasma 6"
         ]
       },
       {
@@ -35,14 +29,14 @@ window.LEGENDARY_RELEASES = [
         items: [
           "Wbudowana obsługa Toolbox i Distrobox",
           "Podman jako domyślny silnik kontenerowy",
-          "Rejestr obrazów: ghcr.io/LegendaryOS/LegendaryOS"
+          "Rejestr obrazów: ghcr.io/legendaryos-linux-system/legendaryos:0.0.1"
         ]
       },
       {
         category: "Dokumentacja",
         items: [
           "Pierwsza wersja strony dokumentacji",
-          "Przewodnik po bootc i immutable Linux",
+          "Przewodnik po LegendaryOS",
           "Sekcja instalacji z podziałem na edycje"
         ]
       }
