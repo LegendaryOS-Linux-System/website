@@ -260,7 +260,53 @@ document.addEventListener('keydown', e => {
         if (e.key === 'Escape' && overlay.classList.contains('settings-overlay-visible')) closeSettings();
     });
 
-        // Animation toggle
+        // ── THEMES ──────────────────────────────────────────────────────────────
+        const THEMES = {
+            default: {
+                '--neon-pink':   '#e040fb',
+                '--neon-purple': '#aa00ff',
+                '--neon-violet': '#7c4dff',
+                '--neon-blue':   '#40c4ff',
+            },
+            cyan: {
+                '--neon-pink':   '#00e5ff',
+                '--neon-purple': '#0091ea',
+                '--neon-violet': '#00b0ff',
+                '--neon-blue':   '#80d8ff',
+            },
+            green: {
+                '--neon-pink':   '#69ff47',
+                '--neon-purple': '#00c853',
+                '--neon-violet': '#1de9b6',
+                '--neon-blue':   '#b9f6ca',
+            },
+            red: {
+                '--neon-pink':   '#ff1744',
+                '--neon-purple': '#ff6d00',
+                '--neon-violet': '#ff4081',
+                '--neon-blue':   '#ff6e40',
+            },
+        };
+
+        function applyTheme(name) {
+            const vars = THEMES[name] || THEMES.default;
+            const root = document.documentElement;
+            Object.entries(vars).forEach(([k, v]) => root.style.setProperty(k, v));
+            themeButtons.forEach(b => b.classList.toggle('active', b.dataset.theme === name));
+            try { localStorage.setItem('los-theme', name); } catch(e) {}
+        }
+
+        themeButtons.forEach(tb => {
+            tb.addEventListener('click', () => applyTheme(tb.dataset.theme));
+        });
+
+        // restore saved theme
+        try {
+            const saved = localStorage.getItem('los-theme');
+            if (saved && THEMES[saved]) applyTheme(saved);
+        } catch(e) {}
+
+        // ── ANIMATION TOGGLE ────────────────────────────────────────────────────
         if (animToggle) {
             animToggle.addEventListener('change', () => {
                 const enabled = animToggle.checked;
@@ -269,12 +315,96 @@ document.addEventListener('keydown', e => {
             });
         }
 
-        // Theme buttons (only default active for now)
-        themeButtons.forEach(tb => {
-            tb.addEventListener('click', () => {
-                if (tb.dataset.theme !== 'default') return;
-                themeButtons.forEach(b => b.classList.remove('active'));
-                tb.classList.add('active');
+        // ── STAR DENSITY ────────────────────────────────────────────────────────
+        const densitySlider = document.getElementById('star-density');
+        const densityVal    = document.getElementById('star-density-val');
+        if (densitySlider) {
+            densitySlider.addEventListener('input', () => {
+                const v = parseInt(densitySlider.value, 10);
+                if (densityVal) densityVal.textContent = v;
+                if (window._starsSetCount) window._starsSetCount(v);
+            });
+        }
+
+        // ── SCANLINES ───────────────────────────────────────────────────────────
+        const scanlinesToggle = document.getElementById('scanlines-toggle');
+        const scanlinesEl     = document.getElementById('scanlines-overlay');
+        if (scanlinesToggle && scanlinesEl) {
+            scanlinesToggle.addEventListener('change', () => {
+                scanlinesEl.style.display = scanlinesToggle.checked ? 'block' : 'none';
+            });
+        }
+
+        // ── BACKDROP BLUR ───────────────────────────────────────────────────────
+        const blurToggle = document.getElementById('blur-toggle');
+        if (blurToggle) {
+            const blurStyle = document.createElement('style');
+            blurStyle.id = 'los-blur-override';
+            blurToggle.addEventListener('change', () => {
+                if (!blurToggle.checked) {
+                    blurStyle.textContent = '.feature-card,.dl-card,.immutable-card,.faq-item,.install-note,.code-block{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}';
+                    document.head.appendChild(blurStyle);
+                } else {
+                    blurStyle.remove();
+                }
+            });
+        }
+
+        // ── FONT SIZE ───────────────────────────────────────────────────────────
+        const fontBtns = document.querySelectorAll('.font-size-btn');
+        const FONT_SIZES = { normal: '16px', large: '18px', xlarge: '21px' };
+        fontBtns.forEach(fb => {
+            fb.addEventListener('click', () => {
+                const size = FONT_SIZES[fb.dataset.size] || '16px';
+                document.documentElement.style.fontSize = size;
+                fontBtns.forEach(b => {
+                    b.style.borderColor = b === fb ? 'var(--neon-pink)' : 'var(--border-subtle)';
+                    b.style.color       = b === fb ? 'var(--neon-pink)' : 'var(--text-muted)';
+                    b.classList.toggle('active', b === fb);
+                });
+                try { localStorage.setItem('los-fontsize', fb.dataset.size); } catch(e) {}
             });
         });
+
+        try {
+            const savedFs = localStorage.getItem('los-fontsize');
+            if (savedFs) {
+                const btn = document.querySelector(`.font-size-btn[data-size="${savedFs}"]`);
+                if (btn) btn.click();
+            }
+        } catch(e) {}
+
+        // ── SCROLL TO TOP ───────────────────────────────────────────────────────
+        const scrollTopBtn = document.getElementById('scroll-top-btn');
+        if (scrollTopBtn) {
+            scrollTopBtn.addEventListener('click', () => {
+                closeSettings();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+})();
+
+
+/* STAR COUNT CONTROL (extend star field) */
+(function extendStars() {
+    const canvas = document.getElementById('stars-canvas');
+    if (!canvas) return;
+    window._starsSetCount = function(count) {
+        // rebuild star field via resize trick
+        window.dispatchEvent(new Event('resize'));
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width, H = canvas.height;
+        const COLORS = ['#e040fb', '#7c4dff', '#40c4ff', '#aa00ff', '#ffffff'];
+        const stars = Array.from({ length: count }, () => ({
+            x: Math.random() * W,
+                                                           y: Math.random() * H,
+                                                           r: Math.random() * 1.5 + 0.3,
+                                                           color: COLORS[Math.floor(Math.random() * COLORS.length)],
+                                                           alpha: Math.random(),
+                                                           dAlpha: (Math.random() * 0.008 + 0.002) * (Math.random() < 0.5 ? 1 : -1),
+        }));
+        // patch internal stars array via closure — re-init by dispatching resize
+        // The main star engine listens to resize, so we just trigger it
+        window._pendingStarCount = count;
+    };
 })();
