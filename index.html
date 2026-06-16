@@ -55,14 +55,17 @@
           </button>
           <button class="theme-btn" data-theme="cyan">
             <span class="theme-swatch" style="background:linear-gradient(135deg,#00e5ff,#0091ea);"></span>
-            Cyan Storm (soon)
+            Cyan Storm
           </button>
           <button class="theme-btn" data-theme="green">
             <span class="theme-swatch" style="background:linear-gradient(135deg,#69ff47,#00c853);"></span>
-            Matrix Green (soon)
+            Matrix Green
+          </button>
+          <button class="theme-btn" data-theme="red">
+            <span class="theme-swatch" style="background:linear-gradient(135deg,#ff1744,#ff6d00);"></span>
+            Blood Red
           </button>
         </div>
-        <span class="settings-note">Pełna zmiana motywu będzie dostępna w przyszłości.</span>
       </div>
 
       <div class="settings-group">
@@ -76,12 +79,59 @@
         </div>
       </div>
 
+      <div class="settings-group">
+        <label class="settings-label">Gęstość gwiazd</label>
+        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+          <input type="range" id="star-density" min="0" max="400" value="180" style="flex:1;min-width:120px;accent-color:var(--neon-pink);">
+          <span id="star-density-val" style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--neon-pink);min-width:2.5rem;">180</span>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <label class="settings-label">Efekt scanlines</label>
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <label class="settings-toggle">
+            <input type="checkbox" id="scanlines-toggle">
+            <span class="settings-toggle-track"></span>
+          </label>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--text-secondary);">Nakładka CRT scanlines</span>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <label class="settings-label">Rozmycie tła paneli</label>
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <label class="settings-toggle">
+            <input type="checkbox" id="blur-toggle" checked>
+            <span class="settings-toggle-track"></span>
+          </label>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--text-secondary);">Backdrop blur na kartach</span>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <label class="settings-label">Rozmiar czcionki</label>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <button class="font-size-btn active" data-size="normal" style="font-family:'Share Tech Mono',monospace;font-size:0.58rem;padding:0.3rem 0.7rem;background:transparent;border:1px solid var(--neon-pink);color:var(--neon-pink);cursor:pointer;">NORMALNY</button>
+          <button class="font-size-btn" data-size="large" style="font-family:'Share Tech Mono',monospace;font-size:0.58rem;padding:0.3rem 0.7rem;background:transparent;border:1px solid var(--border-subtle);color:var(--text-muted);cursor:pointer;">DUŻY</button>
+          <button class="font-size-btn" data-size="xlarge" style="font-family:'Share Tech Mono',monospace;font-size:0.58rem;padding:0.3rem 0.7rem;background:transparent;border:1px solid var(--border-subtle);color:var(--text-muted);cursor:pointer;">BARDZO DUŻY</button>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <label class="settings-label">Scroll do góry</label>
+        <button id="scroll-top-btn" style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:0.4rem 1rem;background:transparent;border:1px solid var(--neon-purple);color:var(--neon-purple);cursor:pointer;letter-spacing:1px;">▲ WRÓĆ NA GÓRĘ</button>
+      </div>
+
       <div class="settings-group" style="border-bottom:none;padding-bottom:0;">
         <label class="settings-label">O projekcie</label>
-        <span style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--text-muted);line-height:1.8;">LegendaryOS v0.0.1-alpha<br>Dokumentacja v0.0.1<br>© 2026 LegendaryOS Project</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--text-muted);line-height:1.8;">LegendaryOS v2026.06<br>Dokumentacja v2026.06<br>© 2026 LegendaryOS Project</span>
       </div>
     </div>
   </div>
+
+  <!-- SCANLINES OVERLAY -->
+  <div id="scanlines-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);"></div>
 
   <!-- HERO -->
   <section class="hero" id="home">
@@ -172,7 +222,6 @@
           <!-- KDE -->
           <div class="dl-card reveal">
             <div class="dl-card-left">
-              <div class="dl-card-de-badge kde">KDE</div>
               <img src="images/environments/kde.png" alt="KDE Plasma" class="de-screenshot" />
             </div>
             <div class="dl-card-right">
@@ -183,40 +232,6 @@
                 <a href="https://sourceforge.net/projects/legendaryos/files/KDE/2026/LegendaryOS-kde-fedora44.x86_64.iso/download" target="_blank" class="btn btn-primary btn-sm">SourceForge</a>
                 <a href="https://drive.google.com/file/d/1DBfisvofgQwchYFp14ow7lbEjGZDyrxq/view?usp=sharing" target="_blank" class="btn btn-secondary btn-sm">Google Drive</a>
                 <a href="https://transfer.it/t/5R8gsy1n2DSR" target="_blank" class="btn btn-secondary btn-sm">Transfer.it</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- GNOME -->
-          <div class="dl-card reveal">
-            <div class="dl-card-left">
-              <div class="dl-card-de-badge" style="color:#ff6e40;border-color:#ff6e40;">GNOME</div>
-              <img src="images/environments/gnome.png" alt="GNOME" class="de-screenshot" />
-            </div>
-            <div class="dl-card-right">
-              <div class="dl-card-header">
-                <h3 class="dl-card-title">LegendaryOS <strong>GNOME</strong></h3>
-              </div>
-              <div class="dl-buttons">
-                <a href="#" class="btn btn-primary btn-sm dl-btn-soon">SourceForge</a>
-                <a href="#" class="btn btn-secondary btn-sm dl-btn-soon">Transfer.it</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Cosmic -->
-          <div class="dl-card reveal">
-            <div class="dl-card-left">
-              <div class="dl-card-de-badge cosmic">COSMIC</div>
-              <img src="images/environments/cosmic.png" alt="COSMIC DE" class="de-screenshot" />
-            </div>
-            <div class="dl-card-right">
-              <div class="dl-card-header">
-                <h3 class="dl-card-title">LegendaryOS <strong>Cosmic</strong></h3>
-              </div>
-              <div class="dl-buttons">
-                <a href="#" class="btn btn-primary btn-sm dl-btn-soon">SourceForge</a>
-                <a href="#" class="btn btn-secondary btn-sm dl-btn-soon">Transfer.it</a>
               </div>
             </div>
           </div>
@@ -240,14 +255,6 @@
 
         </div>
 
-        <div class="install-note reveal">
-          <strong>Jak nagra&#263; na USB:</strong>
-          <div class="code-block pixel-corners" style="margin-top:1rem;">
-            <button class="copy-btn" data-copy="dd">KOPIUJ</button>
-            <span class="comment"># Nagraj ISO na pendrive (zam&#322; /dev/sdX na swoje urz&#261;dzenie)</span><br>
-            <span class="cmd-keyword">sudo</span> dd <span class="cmd-flag">if=</span>LegendaryOS-kde-x86_64.iso <span class="cmd-flag">of=</span>/dev/sdX <span class="cmd-flag">bs=</span>4M <span class="cmd-flag">status=</span>progress &amp;&amp; sync
-          </div>
-        </div>
       </div>
 
       <!-- VM TAB -->
@@ -255,25 +262,6 @@
         <p class="tab-intro">Przetestuj LegendaryOS w maszynie wirtualnej bez pe&#322;nej instalacji. Pobierz gotowy obraz ISO i uruchom przez QEMU.</p>
 
         <div class="dl-cards">
-
-          <div class="dl-card reveal">
-            <div class="dl-card-left">
-              <div class="dl-card-de-badge kde">KDE</div>
-              <img src="images/environments/kde.png" alt="KDE Plasma" class="de-screenshot" />
-            </div>
-            <div class="dl-card-right">
-              <div class="dl-card-header">
-                <h3 class="dl-card-title">LegendaryOS <strong>KDE</strong></h3>
-              </div>
-              <p class="dl-card-desc">Obraz ISO z edycj&#261; KDE Plasma 6 &mdash; gotowy do uruchomienia w KVM/QEMU lub virt-manager. Natywna obs&#322;uga VirtIO dla najlepszej wydajno&#347;ci.</p>
-              <div class="dl-meta"><span>ISO</span><span>KDE Plasma 6</span></div>
-              <div class="dl-buttons">
-                <a href="https://sourceforge.net/projects/legendaryos/files/vm/kde/" target="_blank" class="btn btn-primary btn-sm">SourceForge</a>
-                <a href="https://transfer.it" target="_blank" class="btn btn-secondary btn-sm">Transfer.it</a>
-              </div>
-            </div>
-          </div>
-
         </div>
 
         <div class="install-note reveal">
