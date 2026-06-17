@@ -45,17 +45,17 @@ body::before {
         transparent,
         transparent 2px,
         rgba(0,0,0,0.06) 2px,
-        rgba(0,0,0,0.06) 4px
+                                          rgba(0,0,0,0.06) 4px
     );
     pointer-events: none;
     z-index: 9999;
 }
 
 #stars-canvas {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
+position: fixed;
+inset: 0;
+pointer-events: none;
+z-index: 0;
 }
 
 /* NAV */
@@ -168,21 +168,37 @@ nav {
 }
 
 #settings-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 2000;
-    background: rgba(5,5,8,0.85);
-    backdrop-filter: blur(8px);
+position: fixed;
+inset: 0;
+z-index: 2000;
+background: rgba(5,5,8,0.85);
+backdrop-filter: blur(8px);
 }
 
 #settings-panel {
-    background: var(--bg-card);
-    border: 1px solid var(--border-glow);
-    padding: 2.5rem;
-    max-width: 420px;
-    width: 90%;
-    position: relative;
-    box-shadow: 0 0 60px rgba(224,64,251,0.2);
+background: var(--bg-card);
+border: 1px solid var(--border-glow);
+padding: 2.5rem;
+max-width: 420px;
+width: 90%;
+position: relative;
+box-shadow: 0 0 60px rgba(224,64,251,0.2);
+max-height: 85vh;
+overflow-y: auto;
+overflow-x: hidden;
+scrollbar-width: thin;
+scrollbar-color: var(--neon-pink) transparent;
+}
+
+#settings-panel::-webkit-scrollbar {
+width: 4px;
+}
+#settings-panel::-webkit-scrollbar-track {
+background: transparent;
+}
+#settings-panel::-webkit-scrollbar-thumb {
+background: var(--neon-pink);
+border-radius: 2px;
 }
 
 .settings-group {
