@@ -1,481 +1,88 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LegendaryOS &mdash; Dokumentacja</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" type="image/png" href="images/LegendaryOS.png">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#090311" />
+    <meta name="description" content="LegendaryOS — system Linux dla codzienności, telefonów i otwartych technologii." />
+    <title>LegendaryOS — make your system legendary</title>
+    <link rel="preconnect" href="https://raw.githubusercontent.com" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="stars" aria-hidden="true"></div>
 
-  <canvas id="stars-canvas"></canvas>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="LegendaryOS — strona główna">
+        <img src="https://raw.githubusercontent.com/LegendaryOS-Linux-System/LegendaryOS/cosmic/branding/logo.png" alt="LegendaryOS" />
+        <span>LEGENDARY<span>OS</span></span>
+      </a>
+      <nav aria-label="Główna nawigacja">
+        <a href="#editions">Edycje</a>
+        <a href="#runtime">Hacker Lang++</a>
+        <a href="#download">Pobierz</a>
+        <a href="/changelog/">Changelog</a>
+      </nav>
+      <a class="nav-cta" href="#download">Pobierz OS <span>↗</span></a>
+    </header>
 
-  <nav>
-    <a href="#" class="nav-logo">
-      <div class="nav-logo-text">
-        LegendaryOS
-        <span><a href="changelog/index.html" style="color:inherit;text-decoration:none;">dokumentacja v0.0.1</a></span>
-      </div>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#features">Funkcje</a></li>
-      <li><a href="#install">Instalacja</a></li>
-      <li><a href="#immutable">Immutable</a></li>
-      <li><a href="#faq">FAQ</a></li>
-    </ul>
-    <div class="nav-badge" id="settings-btn" style="cursor:pointer;" title="Ustawienia">SETTINGS</div>
-  </nav>
-
-  <!-- SETTINGS PANEL -->
-  <div id="settings-overlay" class="settings-overlay-hidden">
-    <div id="settings-panel">
-      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--neon-pink),var(--neon-purple),var(--neon-blue));"></div>
-      <button id="settings-close" style="position:absolute;top:1rem;right:1rem;background:transparent;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;font-family:'Share Tech Mono',monospace;">✕</button>
-      <h2 style="font-family:'Press Start 2P',monospace;font-size:0.65rem;color:var(--neon-pink);margin-bottom:2rem;letter-spacing:2px;">SETTINGS</h2>
-
-      <div class="settings-group">
-        <label class="settings-label">Język / Language</label>
-        <div class="settings-select-wrap">
-          <select id="lang-select" class="settings-select" disabled>
-            <option value="pl">Polski</option>
-            <option value="en">English (soon)</option>
-            <option value="de">Deutsch (soon)</option>
-          </select>
-          <span class="settings-note">Zmiana języka będzie dostępna w przyszłości.</span>
-        </div>
-      </div>
-
-      <div class="settings-group">
-        <label class="settings-label">Motyw / Theme</label>
-        <div class="settings-themes">
-          <button class="theme-btn active" data-theme="default">
-            <span class="theme-swatch" style="background:linear-gradient(135deg,#e040fb,#7c4dff);"></span>
-            Violet Night
-          </button>
-          <button class="theme-btn" data-theme="cyan">
-            <span class="theme-swatch" style="background:linear-gradient(135deg,#00e5ff,#0091ea);"></span>
-            Cyan Storm
-          </button>
-          <button class="theme-btn" data-theme="green">
-            <span class="theme-swatch" style="background:linear-gradient(135deg,#69ff47,#00c853);"></span>
-            Matrix Green
-          </button>
-          <button class="theme-btn" data-theme="red">
-            <span class="theme-swatch" style="background:linear-gradient(135deg,#ff1744,#ff6d00);"></span>
-            Blood Red
-          </button>
-        </div>
-      </div>
-
-      <div class="settings-group">
-        <label class="settings-label">Animacje</label>
-        <div style="display:flex;align-items:center;gap:1rem;">
-          <label class="settings-toggle">
-            <input type="checkbox" id="anim-toggle" checked>
-            <span class="settings-toggle-track"></span>
-          </label>
-          <span style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--text-secondary);">Animacje gwiazd i glitch</span>
-        </div>
-      </div>
-
-      <div class="settings-group">
-        <label class="settings-label">Gęstość gwiazd</label>
-        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-          <input type="range" id="star-density" min="0" max="400" value="180" style="flex:1;min-width:120px;accent-color:var(--neon-pink);">
-          <span id="star-density-val" style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--neon-pink);min-width:2.5rem;">180</span>
-        </div>
-      </div>
-
-      <div class="settings-group">
-        <label class="settings-label">Efekt scanlines</label>
-        <div style="display:flex;align-items:center;gap:1rem;">
-          <label class="settings-toggle">
-            <input type="checkbox" id="scanlines-toggle">
-            <span class="settings-toggle-track"></span>
-          </label>
-          <span style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--text-secondary);">Nakładka CRT scanlines</span>
-        </div>
-      </div>
-
-      <div class="settings-group">
-        <label class="settings-label">Rozmycie tła paneli</label>
-        <div style="display:flex;align-items:center;gap:1rem;">
-          <label class="settings-toggle">
-            <input type="checkbox" id="blur-toggle" checked>
-            <span class="settings-toggle-track"></span>
-          </label>
-          <span style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--text-secondary);">Backdrop blur na kartach</span>
-        </div>
-      </div>
-
-      <div class="settings-group">
-        <label class="settings-label">Rozmiar czcionki</label>
-        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-          <button class="font-size-btn active" data-size="normal" style="font-family:'Share Tech Mono',monospace;font-size:0.58rem;padding:0.3rem 0.7rem;background:transparent;border:1px solid var(--neon-pink);color:var(--neon-pink);cursor:pointer;">NORMALNY</button>
-          <button class="font-size-btn" data-size="large" style="font-family:'Share Tech Mono',monospace;font-size:0.58rem;padding:0.3rem 0.7rem;background:transparent;border:1px solid var(--border-subtle);color:var(--text-muted);cursor:pointer;">DUŻY</button>
-          <button class="font-size-btn" data-size="xlarge" style="font-family:'Share Tech Mono',monospace;font-size:0.58rem;padding:0.3rem 0.7rem;background:transparent;border:1px solid var(--border-subtle);color:var(--text-muted);cursor:pointer;">BARDZO DUŻY</button>
-        </div>
-      </div>
-
-      <div class="settings-group">
-        <label class="settings-label">Scroll do góry</label>
-        <button id="scroll-top-btn" style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:0.4rem 1rem;background:transparent;border:1px solid var(--neon-purple);color:var(--neon-purple);cursor:pointer;letter-spacing:1px;">▲ WRÓĆ NA GÓRĘ</button>
-      </div>
-
-      <div class="settings-group" style="border-bottom:none;padding-bottom:0;">
-        <label class="settings-label">O projekcie</label>
-        <span style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--text-muted);line-height:1.8;">LegendaryOS v2026.06<br>Dokumentacja v2026.06<br>© 2026 LegendaryOS Project</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- SCANLINES OVERLAY -->
-  <div id="scanlines-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);"></div>
-
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-bg-glow"></div>
-    <h1 class="hero-title">
-      LEGENDARY<span class="hero-title-os">OS</span>
-    </h1>
-    <p class="hero-desc">
-      Nowoczesna, niezmutowalna dystrybucja Linux oparta na Fedorze.
-      Zaprojektowana dla bezpiecze&#324;stwa, odporno&#347;ci i pe&#322;nej kontroli nad systemem.
-    </p>
-    <div class="hero-buttons">
-      <a href="#install" class="btn btn-primary">POBIERZ</a>
-      <a href="#features" class="btn btn-secondary">DOKUMENTACJA</a>
-    </div>
-  </section>
-
-  <!-- FEATURES -->
-  <section id="features">
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="section-tag">co wyr&oacute;&#380;nia LegendaryOS</span>
-        <h2 class="section-title">KLUCZOWE <span class="accent">FUNKCJE</span></h2>
-      </div>
-      <div class="pixel-divider reveal"><span class="pixel-divider-icon">&#11043;</span></div>
-      <div class="features-grid">
-
-        <div class="feature-card pixel-corners reveal">
-          <h3 class="feature-title">IMMUTABLE ROOT FILESYSTEM</h3>
-          <p class="feature-desc">Partycja systemowa jest zamontowana tylko do odczytu. &#379;adna aplikacja ani u&#380;ytkownik nie mo&#380;e przypadkowo uszkodzi&#263; rdzenia systemu. Twoja instalacja zawsze pozostaje czysta.</p>
-          <span class="feature-tag">read-only /</span>
-        </div>
-
-        <div class="feature-card pixel-corners reveal">
-          <h3 class="feature-title">OCI CONTAINER IMAGES</h3>
-          <p class="feature-desc">Ca&#322;y system operacyjny jest dystrybuowany jako obraz OCI &mdash; ten sam format co kontenery Docker i Podman. Wersjonowanie, rollback i audyt staj&#261; si&#281; trywialne.</p>
-          <span class="feature-tag">oci compliant</span>
-        </div>
-
-        <div class="feature-card pixel-corners reveal">
-          <h3 class="feature-title">ATOMIC UPDATES</h3>
-          <p class="feature-desc">Aktualizacje systemu s&#261; atomowe &mdash; albo aplikowane w ca&#322;o&#347;ci, albo wcale. Nigdy nie zostaniesz z nap&oacute;&#322; zaktualizowanym systemem po utracie zasilania. Do aktualizacji u&#380;ywasz <code>bootc upgrade</code>.</p>
-          <span class="feature-tag">zero partial updates</span>
-        </div>
-
-        <div class="feature-card pixel-corners reveal">
-          <h3 class="feature-title">B&#321;YSKAWICZNY ROLLBACK</h3>
-          <p class="feature-desc">Co&#347; posz&#322;o nie tak? Jedno polecenie lub restart z poprzedniego wpisu w bootloaderze przywraca dok&#322;adnie poprzedni stan systemu &mdash; bez utraty danych w /home.</p>
-          <span class="feature-tag">instant recovery</span>
-        </div>
-
-        <div class="feature-card pixel-corners reveal">
-          <h3 class="feature-title">RPM-OSTREE &amp; DODATKOWE PAKIETY</h3>
-          <p class="feature-desc">Je&#347;li chcesz doinstalowa&#263; pakiet bezpo&#347;rednio do systemu bez budowania w&#322;asnego obrazu, u&#380;yj <code>rpm-ostree install</code>. Zmiana zostanie zastosowana przy nast&#281;pnym restarcie i mo&#380;na j&#261; cofn&#261;&#263;.</p>
-          <span class="feature-tag">rpm-ostree overlay</span>
-        </div>
-
-        <div class="feature-card pixel-corners reveal">
-          <h3 class="feature-title">TOOLBOX / DISTROBOX</h3>
-          <p class="feature-desc">&#346;rodowiska deweloperskie dzia&#322;aj&#261; w izolowanych kontenerach przez Toolbox lub Distrobox. Instaluj dowolne narz&#281;dzia bez dotykania systemu hosta.</p>
-          <span class="feature-tag">containerized dev</span>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- INSTALL -->
-  <section id="install" class="install-section">
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="section-tag">pierwsze kroki</span>
-        <h2 class="section-title"><span class="accent">POBIERZ</span> LEGENDARYOS</h2>
-      </div>
-
-      <div class="install-tabs reveal">
-        <button class="tab-btn active" data-tab="iso">ISO</button>
-        <button class="tab-btn" data-tab="vm">MASZYNA WIRTUALNA</button>
-        <button class="tab-btn" data-tab="upgrade">UPGRADE / SWITCH</button>
-        <button class="tab-btn" data-tab="custom">W&#321;ASNY OBRAZ</button>
-      </div>
-
-      <!-- ISO TAB -->
-      <div class="tab-content active reveal" id="tab-iso">
-
-        <div class="dl-cards">
-
-          <!-- KDE -->
-          <div class="dl-card reveal">
-            <div class="dl-card-left">
-              <img src="images/environments/kde.png" alt="KDE Plasma" class="de-screenshot" />
-            </div>
-            <div class="dl-card-right">
-              <div class="dl-card-header">
-                <h3 class="dl-card-title">LegendaryOS <strong>KDE</strong></h3>
-              </div>
-              <div class="dl-buttons">
-                <a href="https://sourceforge.net/projects/legendaryos/files/KDE/2026/LegendaryOS-kde-fedora44.x86_64.iso/download" target="_blank" class="btn btn-primary btn-sm">SourceForge</a>
-                <a href="https://drive.google.com/file/d/1DBfisvofgQwchYFp14ow7lbEjGZDyrxq/view?usp=sharing" target="_blank" class="btn btn-secondary btn-sm">Google Drive</a>
-                <a href="https://transfer.it/t/5R8gsy1n2DSR" target="_blank" class="btn btn-secondary btn-sm">Transfer.it</a>
-              </div>
-            </div>
+    <main id="top">
+      <section class="hero section-shell">
+        <div class="hero-copy reveal">
+          <p class="eyebrow"><span class="pulse"></span> NOWA LEGENDA W BUDOWIE</p>
+          <h1>Twój system.<br /><em>Twoja legenda.</em></h1>
+          <p class="hero-text">LegendaryOS to przyjazny Linux inspirowany ekosystemem HackerOS — dla ludzi, którzy wolą tworzyć, grać i odkrywać niż dopasowywać się do systemu.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#download">Zobacz wydania <span>↓</span></a>
+            <a class="button quiet" href="#editions">Poznaj LegendaryOS <span>→</span></a>
           </div>
-
-          <!-- Blue (wkrótce) -->
-          <div class="dl-card reveal">
-            <div class="dl-card-left">
-              <div class="dl-card-de-badge blue">BLUE</div>
-              <img src="images/environments/blue.png" alt="LegendaryOS Blue" class="de-screenshot" />
-            </div>
-            <div class="dl-card-right">
-              <div class="dl-card-header">
-                <h3 class="dl-card-title">LegendaryOS <strong>Blue</strong></h3>
-              </div>
-              <div class="dl-buttons">
-                <a href="#" class="btn btn-primary btn-sm dl-btn-soon">SourceForge</a>
-                <a href="#" class="btn btn-secondary btn-sm dl-btn-soon">Transfer.it</a>
-              </div>
-            </div>
-          </div>
-
+          <dl class="hero-stats">
+            <div><dt>3</dt><dd>główne edycje</dd></div>
+            <div><dt>4</dt><dd>języki ekosystemu</dd></div>
+            <div><dt>∞</dt><dd>możliwości</dd></div>
+          </dl>
         </div>
-
-      </div>
-
-      <!-- VM TAB -->
-      <div class="tab-content reveal" id="tab-vm">
-        <p class="tab-intro">Przetestuj LegendaryOS w maszynie wirtualnej bez pe&#322;nej instalacji. Pobierz gotowy obraz ISO i uruchom przez QEMU.</p>
-
-        <div class="dl-cards">
+        <div class="hero-art reveal" aria-label="Logo LegendaryOS">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <div class="logo-glow"></div>
+          <img src="https://raw.githubusercontent.com/LegendaryOS-Linux-System/LegendaryOS/cosmic/branding/logo.png" alt="Fioletowo-niebieski feniks LegendaryOS" />
+          <p>RISE BEYOND ORDINARY</p>
         </div>
+      </section>
 
-        <div class="install-note reveal">
-          <strong>Uruchomienie przez QEMU (KVM):</strong>
-          <div class="code-block pixel-corners" style="margin-top:1rem;">
-            <button class="copy-btn" data-copy="qemu">KOPIUJ</button>
-            <span class="comment"># Uruchom pobrany obraz ISO w QEMU (min. 4 GB RAM zalecane)</span><br>
-            <span class="cmd-keyword">qemu-system-x86_64</span> \<br>
-            &nbsp;&nbsp;<span class="cmd-flag">-m</span> <span class="cmd-value">4G</span> \<br>
-            &nbsp;&nbsp;<span class="cmd-flag">-cpu</span> host \<br>
-            &nbsp;&nbsp;<span class="cmd-flag">-accel</span> kvm \<br>
-            &nbsp;&nbsp;<span class="cmd-flag">-smp</span> <span class="cmd-value">4</span> \<br>
-            &nbsp;&nbsp;<span class="cmd-flag">-cdrom</span> <span class="cmd-value">LegendaryOS-kde-x86_64.iso</span> \<br>
-            &nbsp;&nbsp;<span class="cmd-flag">-vga</span> virtio \<br>
-            &nbsp;&nbsp;<span class="cmd-flag">-display</span> sdl<br><br>
-            <span class="comment"># Alternatywnie: zaimportuj do virt-manager lub GNOME Boxes</span>
-          </div>
-        </div>
-      </div>
+      <section class="ticker" aria-label="Cechy LegendaryOS">
+        <div>BLUE ENVIRONMENT <b>✦</b> OPEN ECOSYSTEM <b>✦</b> ARM64 READY <b>✦</b> FEDORA POWERED <b>✦</b> BLUE ENVIRONMENT <b>✦</b> OPEN ECOSYSTEM <b>✦</b></div>
+      </section>
 
-      <!-- UPGRADE TAB -->
-      <div class="tab-content reveal" id="tab-upgrade">
-        <p class="tab-intro">Prze&#322;&#261;cz istniej&#261;cy system oparty na Fedorze bezpo&#347;rednio na LegendaryOS &mdash; bez reinstalacji, bez utraty danych.</p>
-        <div class="code-block pixel-corners">
-          <button class="copy-btn" data-copy="upgrade">KOPIUJ</button>
-          <span class="comment"># Upewnij si&#281;, &#380;e bootc jest zainstalowany</span><br>
-          <span class="cmd-keyword">sudo</span> dnf install <span class="cmd-value">bootc</span><br><br>
-          <span class="comment"># Prze&#322;&#261;cz na LegendaryOS</span><br>
-          <span class="cmd-keyword">sudo</span> bootc switch <span class="cmd-string">ghcr.io/legendaryos-linux-system/legendaryos:0.0.1</span><br><br>
-          <span class="comment"># Sprawd&#378; status</span><br>
-          <span class="cmd-keyword">bootc</span> status<br><br>
-          <span class="comment"># Zrestartuj, aby zastosowa&#263; zmian&#281;</span><br>
-          <span class="cmd-keyword">systemctl</span> reboot
+      <section id="editions" class="editions section-shell">
+        <div class="section-heading reveal"><p class="eyebrow">01 / EDYCJE</p><h2>Jeden duch.<br /><em>Trzy ścieżki.</em></h2><p>Wybierz system, który pasuje do Twojego sprzętu i sposobu pracy.</p></div>
+        <div class="edition-grid">
+          <article class="edition-card phones reveal"><span class="card-index">01</span><div class="device-shape phone-shape"></div><p class="card-tag">ARM64 / MOBILE</p><h3>Phones</h3><p>LegendaryOS na telefony i urządzenia ARM64. Natywne doświadczenie z Blue Environment — lekkie, wizualne, Twoje.</p><ul><li>ARM64</li><li>Blue Environment</li><li>Warianty mobilne</li></ul><a href="#download">Poznaj Phones <span>→</span></a></article>
+          <article class="edition-card classic reveal"><span class="card-index">02</span><div class="device-shape desktop-shape"></div><p class="card-tag">DESKTOP / DAILY</p><h3>Classic</h3><p>Klasyczna edycja LegendaryOS: prosty, dopracowany Linux do codziennej pracy, rozrywki i tworzenia.</p><ul><li>Blue Environment</li><li>Desktop ready</li><li>Ekosystem LegendaryOS</li></ul><a href="#download">Poznaj Classic <span>→</span></a></article>
+          <article class="edition-card fedora reveal"><span class="card-index">03</span><div class="device-shape cube-shape"></div><p class="card-tag">FEDORA / ATOMIC</p><h3>Fedora</h3><p>LegendaryOS na bazie Fedory — w zwykłej lub atomowej, niezmiennej odsłonie. Nowoczesność bez kompromisów.</p><ul><li>Fedora base</li><li>Atomic option</li><li>Immutable ready</li></ul><a href="#download">Poznaj Fedora <span>→</span></a></article>
         </div>
-        <div class="install-note" style="margin-top:1.5rem;">
-          Dane w <code>/home</code> i <code>/var</code> pozostaj&#261; nienaruszone. Konfiguracje w <code>/etc</code> s&#261; scalane automatycznie przez mechanizm 3-way merge.
-        </div>
-      </div>
+      </section>
 
-      <!-- CUSTOM IMAGE TAB -->
-      <div class="tab-content reveal" id="tab-custom">
-        <p class="tab-intro">Zbuduj w&#322;asn&#261; wersj&#281; LegendaryOS jako obraz OCI. Dodaj pakiety, konfiguracj&#281;, us&#322;ugi systemd &mdash; wszystko deklaratywnie w jednym Containerfile.</p>
-        <div class="code-block pixel-corners">
-          <button class="copy-btn" data-copy="custom">KOPIUJ</button>
-          <span class="comment"># Containerfile &mdash; w&#322;asny obraz oparty na LegendaryOS</span><br>
-          <span class="cmd-keyword">FROM</span> <span class="cmd-string">ghcr.io/legendaryos-linux-system/legendaryos:0.0.1</span><br><br>
-          <span class="comment"># Dodaj pakiety przez dnf</span><br>
-          <span class="cmd-keyword">RUN</span> dnf install <span class="cmd-flag">-y</span> vim git htop &amp;&amp; dnf clean all<br><br>
-          <span class="comment"># Skopiuj w&#322;asn&#261; konfiguracj&#281;</span><br>
-          <span class="cmd-keyword">COPY</span> my-config/ /etc/<br><br>
-          <span class="comment"># Zbuduj i wypchnij do rejestru</span><br>
-          <span class="cmd-keyword">podman</span> build <span class="cmd-flag">-t</span> <span class="cmd-string">ghcr.io/moj-user/moj-legendary:latest</span> .<br>
-          <span class="cmd-keyword">podman</span> push <span class="cmd-string">ghcr.io/moj-user/moj-legendary:latest</span><br><br>
-          <span class="comment"># Prze&#322;&#261;cz system na w&#322;asny obraz</span><br>
-          <span class="cmd-keyword">sudo</span> bootc switch <span class="cmd-string">ghcr.io/moj-user/moj-legendary:latest</span>
-        </div>
-      </div>
+      <section class="blue-environment"><div class="section-shell blue-inner reveal"><div><p class="eyebrow">BLUE ENVIRONMENT</p><h2>Domyślnie<br /><em>wyjątkowy.</em></h2></div><p>Blue Environment jest sercem LegendaryOS. Zamiast traktować je jak osobną edycję, stawiamy je w centrum każdego normalnego wydania — bo dobry interfejs nie powinien być dodatkiem.</p><div class="blue-pills"><span>cosmic UI</span><span>pixel spirit</span><span>made for flow</span></div></div></section>
 
-    </div>
-  </section>
+      <section id="runtime" class="runtime section-shell"><div class="runtime-terminal reveal"><div class="terminal-bar"><span></span><span></span><span></span><b>legendary@runtime:~</b></div><pre><code><i>01</i> <span class="purple">runtime</span> HackerLang++ {
+<i>02</i>   <span class="blue">compatibility</span>: <span class="green">"100% Hacker Lang"</span>;
+<i>03</i>   <span class="blue">targets</span>: [everywhere];
+<i>04</i>   <span class="blue">syntax</span>: extended;
+<i>05</i> }
+<i>06</i>
+<i>07</i> <span class="comment">// build legendary things.</span></code></pre></div><div class="runtime-copy reveal"><p class="eyebrow">02 / RUNTIME</p><h2>Hacker Lang<span>++</span></h2><p>Własny runtime LegendaryOS, który działa wszędzie i pod różnymi postaciami. W pełni wspiera składnię Hacker Lang, a jednocześnie rozszerza ją o nowe możliwości.</p><ul class="feature-list"><li><b>100%</b><span>zgodności z Hacker Lang</span></li><li><b>+</b><span>rozszerzona składnia</span></li><li><b>⌘</b><span>jeden runtime, wiele miejsc</span></li></ul></div></section>
 
-  <!-- IMMUTABLE -->
-  <section id="immutable">
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="section-tag">filozofia projektu</span>
-        <h2 class="section-title">CZYM JEST <span class="accent">IMMUTABLE</span> LINUX?</h2>
-      </div>
-      <div class="pixel-divider reveal"><span class="pixel-divider-icon">&#11043;</span></div>
-      <p class="reveal" style="text-align:center;color:var(--text-secondary);font-size:1.05rem;max-width:700px;margin:0 auto 3rem;font-family:'Rajdhani',sans-serif;">
-        Tradycyjne dystrybucje Linux pozwalaj&#261; na modyfikacj&#281; ka&#380;dego pliku systemowego.
-        LegendaryOS stosuje odmienn&#261; filozofi&#281; &mdash; <strong style="color:var(--neon-pink)">system jest prawd&#261;, a zmiany s&#261; wyj&#261;tkiem</strong>, nie regu&#322;&#261;.
-      </p>
-      <div class="immutable-grid">
-        <div class="immutable-card reveal"><h4>ODPORNO&#346;&#262; NA USZKODZENIA</h4><p>Przypadkowe <code>rm -rf</code>, b&#322;&#281;dna konfiguracja, wadliwy skrypt &mdash; &#380;adna z tych operacji nie mo&#380;e dotkn&#261;&#263; partycji systemowej zamontowanej tylko do odczytu.</p></div>
-        <div class="immutable-card reveal"><h4>PE&#321;NA PRZEWIDYWALNO&#346;&#262;</h4><p>Stan systemu po uruchomieniu jest zawsze identyczny z obrazem OCI. Zero "dzia&#322;a u mnie" &mdash; ka&#380;da instalacja tego samego obrazu jest bit-for-bit identyczna.</p></div>
-        <div class="immutable-card reveal"><h4>BEZPIECZNE AKTUALIZACJE</h4><p>Aktualizacje wykonujesz poleceniem <code>bootc upgrade</code>. S&#261; testowane i podpisane przed wydaniem. Je&#347;li co&#347; p&oacute;jdzie nie tak &mdash; reboot przywraca poprzedni&#261; generacj&#281;.</p></div>
-        <div class="immutable-card reveal"><h4>DANE W /home S&#260; BEZPIECZNE</h4><p>Pliki u&#380;ytkownika w <code>/home</code> oraz <code>/var</code> nigdy nie s&#261; dotykane przez aktualizacje systemu. Twoje dane i konfiguracje pozostaj&#261; nienaruszone.</p></div>
-        <div class="immutable-card reveal"><h4>MNIEJSZA POWIERZCHNIA ATAKU</h4><p>Z&#322;o&#347;liwe oprogramowanie nie mo&#380;e modyfikowa&#263; plik&oacute;w systemowych nawet po uzyskaniu uprawnie&#324; u&#380;ytkownika. System hosta pozostaje czysty.</p></div>
-        <div class="immutable-card reveal"><h4>SZYBSZE STARTY</h4><p>System nie musi weryfikowa&#263; sp&oacute;jno&#347;ci tysi&#281;cy plik&oacute;w przy ka&#380;dym rozruchu. Obraz jest zaufany i niezmienny &mdash; boot jest szybszy i pewniejszy.</p></div>
-      </div>
-    </div>
-  </section>
+      <section class="ecosystem section-shell"><div class="section-heading reveal"><p class="eyebrow">03 / EKOSYSTEM</p><h2>Tworzone w języku<br /><em>otwartych możliwości.</em></h2></div><div class="language-list reveal"><div><span>01</span><strong>Lua</strong><small>lekkość i skrypty</small></div><div><span>02</span><strong>Hacker Lang</strong><small>rdzeń doświadczenia</small></div><div><span>03</span><strong>H#</strong><small>wydajność i narzędzia</small></div><div><span>04</span><strong>HackerScript</strong><small>przyszłość platformy</small></div></div></section>
 
-  <!-- FAQ -->
-  <section id="faq" style="background:var(--bg-secondary);border-top:1px solid var(--border-subtle);">
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="section-tag">cz&#281;sto zadawane pytania</span>
-        <h2 class="section-title">FAQ</h2>
-      </div>
-      <div class="faq-list">
-        <div class="faq-item reveal">
-          <button class="faq-question"><span class="faq-question-text">Czy mog&#281; instalowa&#263; normalne aplikacje RPM?</span><span class="faq-arrow">&#9660;</span></button>
-          <div class="faq-answer">Tak. Flatpak to zalecana metoda dla aplikacji desktopowych. Je&#347;li chcesz doinstalowa&#263; pakiet RPM bezpo&#347;rednio do systemu, u&#380;yj <code>rpm-ostree install &lt;pakiet&gt;</code> &mdash; zmiana zostanie zastosowana po restarcie i mo&#380;na j&#261; cofn&#261;&#263;. Do cel&oacute;w deweloperskich u&#380;ywaj Toolbox lub Distrobox &mdash; instalujesz tam co chcesz, nie dotykaj&#261;c systemu hosta. Mo&#380;esz te&#380; zbudowa&#263; w&#322;asny obraz OCI z dodatkowymi pakietami i prze&#322;&#261;czy&#263; na niego system przez <code>bootc switch</code>.</div>
-        </div>
-        <div class="faq-item reveal">
-          <button class="faq-question"><span class="faq-question-text">Jak aktualizowa&#263; system?</span><span class="faq-arrow">&#9660;</span></button>
-          <div class="faq-answer">Aktualizacje systemu wykonujesz poleceniem <code>sudo bootc upgrade</code>. bootc pobiera nowy obraz OCI i aplikuje go przy nast&#281;pnym restarcie. Je&#347;li co&#347; p&#243;jdzie nie tak, mo&#380;esz natychmiast wr&#243;ci&#263; do poprzedniej wersji przez <code>sudo bootc rollback</code> lub wybieraj&#261;c poprzedni wpis w GRUB.</div>
-        </div>
-        <div class="faq-item reveal">
-          <button class="faq-question"><span class="faq-question-text">Jaka jest r&oacute;&#380;nica mi&#281;dzy bootc a rpm-ostree?</span><span class="faq-arrow">&#9660;</span></button>
-          <div class="faq-answer">bootc i rpm-ostree to dwa r&oacute;&#380;ne narz&#281;dzia, kt&oacute;re wsp&oacute;&#322;istniej&#261; w LegendaryOS. bootc s&#322;u&#380;y do prze&#322;&#261;czania i aktualizowania ca&#322;ego systemu przez obrazy OCI &mdash; to on odpowiada za atomowe aktualizacje i rollback. rpm-ostree z kolei pozwala na "nak&#322;adanie" dodatkowych pakiet&oacute;w RPM na istniej&#261;cy obraz bez potrzeby budowania w&#322;asnego &mdash; przydatne gdy chcesz doinstalowa&#263; co&#347; szybko. Oba narz&#281;dzia dzia&#322;aj&#261; na tej samej warstwie ostree.</div>
-        </div>
-        <div class="faq-item reveal">
-          <button class="faq-question"><span class="faq-question-text">Jak cz&#281;sto wychodz&#261; aktualizacje systemu?</span><span class="faq-arrow">&#9660;</span></button>
-          <div class="faq-answer">LegendaryOS synchronizuje si&#281; z cyklem wyda&#324; Fedory. Wydania pojawiaj&#261; si&#281; regularnie wraz z nowymi wersjami Fedory. Automatyczne sprawdzanie aktualizacji mo&#380;na skonfigurowa&#263; przez timer systemd.</div>
-        </div>
-        <div class="faq-item reveal">
-          <button class="faq-question"><span class="faq-question-text">Co si&#281; dzieje z /etc &mdash; mog&#281; edytowa&#263; konfiguracje?</span><span class="faq-arrow">&#9660;</span></button>
-          <div class="faq-answer">Katalog <code>/etc</code> jest nadpisywalny i zarz&#261;dzany przez mechanizm 3-way merge. Twoje lokalne zmiany s&#261; zachowywane podczas aktualizacji i scalane ze zmianami z obrazu. <code>/var</code> i <code>/home</code> s&#261; w pe&#322;ni pod kontrol&#261; u&#380;ytkownika i nigdy nie s&#261; nadpisywane przez aktualizacje.</div>
-        </div>
-        <div class="faq-item reveal">
-          <button class="faq-question"><span class="faq-question-text">Czy dzia&#322;a Secure Boot?</span><span class="faq-arrow">&#9660;</span></button>
-          <div class="faq-answer">Tak. LegendaryOS obs&#322;uguje Secure Boot przez podpisane obrazy j&#261;dra i bootloadera. Obrazy OCI s&#261; podpisywane kluczem projektu i weryfikowane podczas aktualizacji. Mo&#380;esz te&#380; doda&#263; w&#322;asne klucze MOK.</div>
-        </div>
-        <div class="faq-item reveal">
-          <button class="faq-question"><span class="faq-question-text">Jak wykona&#263; rollback do poprzedniej wersji?</span><span class="faq-arrow">&#9660;</span></button>
-          <div class="faq-answer">Rollback jest b&#322;yskawiczny: uruchom <code>sudo bootc rollback</code> i zrestartuj, lub wybierz poprzedni&#261; pozycj&#281; w menu GRUB. System powr&oacute;ci do dok&#322;adnego stanu poprzedniej generacji bez dotykania danych u&#380;ytkownika.</div>
-        </div>
-        <div class="faq-item reveal">
-          <button class="faq-question"><span class="faq-question-text">Jak u&#380;ywa&#263; Distrobox / Toolbox do developmentu?</span><span class="faq-arrow">&#9660;</span></button>
-          <div class="faq-answer">Distrobox i Toolbox pozwalaj&#261; na uruchamianie pe&#322;noprawnych kontener&oacute;w Linuxa z poziomu terminala. Przyk&#322;ad: <code>distrobox create --name dev --image ubuntu:24.04</code> tworzy kontener Ubuntu, a <code>distrobox enter dev</code> do niego wchodzi. W kontenerze mo&#380;esz instalowa&#263; cokolwiek <code>apt/dnf/pacman</code> bez wp&#322;ywu na system hosta. Toolbox dzia&#322;a analogicznie i jest domy&#347;lnie dost&#281;pny po instalacji.</div>
-        </div>
-        <div class="faq-item reveal">
-          <button class="faq-question"><span class="faq-question-text">Jak zbudowa&#263; w&#322;asny obraz LegendaryOS?</span><span class="faq-arrow">&#9660;</span></button>
-          <div class="faq-answer">Utwórz Containerfile bazuj&#261;cy na <code>ghcr.io/legendaryos-linux-system/legendaryos:0.0.1</code>, dodaj pakiety przez <code>RUN dnf install -y ...</code>, skopiuj konfiguracje, zbuduj przez <code>podman build</code> i wypchnij do rejestru. Nast&#281;pnie prze&#322;&#261;cz system na swój obraz przez <code>sudo bootc switch ghcr.io/twoj-user/twoj-obraz:latest</code>. Szczeg&oacute;&#322;y w zak&#322;adce "W&#322;asny obraz" w sekcji Pobierz.</div>
-        </div>
-        <div class="faq-item reveal">
-          <button class="faq-question"><span class="faq-question-text">Na jakich urz&#261;dzeniach dzia&#322;a LegendaryOS?</span><span class="faq-arrow">&#9660;</span></button>
-          <div class="faq-answer">Aktualnie LegendaryOS obsługuje architektur&#281; x86_64. Minimalne wymagania to ok. 4 GB RAM i 20 GB miejsca na dysku. Wsparcie dla ARM jest planowane w przysz&#322;ych wersjach.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- COMMUNITY -->
-  <section id="community" style="background:var(--bg-secondary);border-top:1px solid var(--border-subtle);">
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="section-tag">dołącz do nas</span>
-        <h2 class="section-title">SPOŁECZNOŚĆ <span class="accent">LEGENDARYOS</span></h2>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:2rem;">
-
-        <a href="https://www.reddit.com/r/LegendaryOS/" target="_blank" class="reveal" style="text-decoration:none;">
-          <div class="feature-card" style="display:flex;flex-direction:column;gap:1rem;cursor:pointer;transition:border-color .2s;">
-            <div style="display:flex;align-items:center;gap:0.8rem;">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="12" fill="#FF4500"/>
-                <path d="M20 12c0-1.1-.9-2-2-2-.5 0-1 .2-1.4.5-1.3-.9-3-.1-3.1 1.5l-1.8-.1c-.1-1.6-1.8-2.4-3.1-1.5C8 10.2 7.5 10 7 10c-1.1 0-2 .9-2 2 0 .8.5 1.5 1.2 1.8 0 .1 0 .2 0 .3 0 2.2 2.6 4 5.8 4s5.8-1.8 5.8-4v-.3C18.5 13.5 20 12.8 20 12z" fill="white"/>
-                <circle cx="10.2" cy="13" r=".8" fill="#FF4500"/>
-                <circle cx="13.8" cy="13" r=".8" fill="#FF4500"/>
-                <path d="M10.5 15.2c.4.3.9.5 1.5.5s1.1-.2 1.5-.5" stroke="#FF4500" stroke-width=".7" stroke-linecap="round"/>
-                <circle cx="16.5" cy="7.5" r="1" fill="#FF4500"/>
-                <path d="M12.5 8.5l2.5-1.5" stroke="white" stroke-width=".6"/>
-              </svg>
-              <span style="font-family:'Press Start 2P',monospace;font-size:0.6rem;color:var(--text-primary);letter-spacing:1px;">REDDIT</span>
-            </div>
-            <p style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-secondary);line-height:1.7;margin:0;">Dyskusje, pytania, newsy — dołącz do społeczności r/LegendaryOS na Reddicie.</p>
-            <span style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--neon-pink);margin-top:auto;">r/LegendaryOS →</span>
-          </div>
-        </a>
-
-        <a href="https://discord.gg/wqxT9SeXDB" target="_blank" class="reveal" style="text-decoration:none;">
-          <div class="feature-card" style="display:flex;flex-direction:column;gap:1rem;cursor:pointer;transition:border-color .2s;">
-            <div style="display:flex;align-items:center;gap:0.8rem;">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="12" fill="#5865F2"/>
-                <path d="M17.2 7.2A14.5 14.5 0 0 0 14.1 6c-.1.2-.3.5-.4.7a13.3 13.3 0 0 0-3.4 0C10.2 6.5 10 6.2 10 6a14.5 14.5 0 0 0-3.2 1.2C5.2 9.8 4.8 12.3 5 14.8c1.3 1 2.5 1.5 3.7 1.9.3-.4.6-.9.8-1.3-.4-.2-.8-.4-1.2-.6l.3-.2c2.4 1.1 5 1.1 7.4 0l.3.2c-.4.2-.8.4-1.2.6.2.4.5.9.8 1.3 1.2-.4 2.4-1 3.7-1.9.2-2.9-.5-5.4-2.4-7.6zm-7 6.1c-.7 0-1.3-.7-1.3-1.5s.6-1.5 1.3-1.5 1.3.7 1.3 1.5-.6 1.5-1.3 1.5zm4.7 0c-.7 0-1.3-.7-1.3-1.5s.6-1.5 1.3-1.5 1.3.7 1.3 1.5-.6 1.5-1.3 1.5z" fill="white"/>
-              </svg>
-              <span style="font-family:'Press Start 2P',monospace;font-size:0.6rem;color:var(--text-primary);letter-spacing:1px;">DISCORD</span>
-            </div>
-            <p style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-secondary);line-height:1.7;margin:0;">Czat na żywo, pomoc techniczna, ogłoszenia — wskocz na nasz serwer Discord.</p>
-            <span style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--neon-pink);margin-top:auto;">discord.gg/wqxT9SeXDB →</span>
-          </div>
-        </a>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <img class="site-logo" src="images/LegendaryOS.png" alt="LegendaryOS" style="width:50px;height:50px;" />
-        <span class="footer-brand-name">LegendaryOS</span>
-        <p>Nowoczesna, niezmutowalna dystrybucja Linux.<br>Zbudowana na Fedorze i mechanizmie bootc/ostree.<br>Dla tych, kt&oacute;rzy ceni&#261; niezawodno&#347;&#263; i kontrol&#281;.</p>
-      </div>
-      <div class="footer-col"><h5>Dokumentacja</h5><ul><li><a href="#install">Instalacja</a></li><li><a href="#immutable">Immutable Linux</a></li><li><a href="#features">Funkcje</a></li><li><a href="#faq">FAQ</a></li></ul></div>
-      <div class="footer-col"><h5>Narz&#281;dzia</h5><ul>
-        <li><a href="https://containertoolbx.org" target="_blank">Toolbox</a></li>
-        <li><a href="https://distrobox.it" target="_blank">Distrobox</a></li>
-        <li><a href="https://flatpak.org" target="_blank">Flatpak</a></li>
-        <li><a href="https://podman.io" target="_blank">Podman</a></li>
-        <li><a href="https://github.com/LegendaryOS-Linux-System/LegendaryOS-Builder" target="_blank">LegendaryOS-Builder</a></li>
-      </ul></div>
-      <div class="footer-col"><h5>Spo&#322;eczno&#347;&#263;</h5><ul>
-        <li><a href="https://github.com/LegendaryOS-Linux-System" target="_blank">GitHub</a></li>
-        <li><a href="https://www.reddit.com/r/LegendaryOS/" target="_blank">Reddit</a></li>
-        <li><a href="https://discord.gg/wqxT9SeXDB" target="_blank">Discord</a></li>
-        <li><a href="https://github.com/orgs/LegendaryOS-Linux-System/discussions" target="_blank">Forum</a></li>
-        <li><a href="https://github.com/LegendaryOS-Linux-System/LegendaryOS/issues" target="_blank">Zg&#322;o&#347; b&#322;&#261;d</a></li>
-        <li><a href="https://sourceforge.net/projects/legendaryos/" target="_blank">SourceForge</a></li>
-        <li><a href="changelog/index.html">Changelog</a></li>
-      </ul></div>
-    </div>
-    <div class="footer-bottom">
-      <p>2026 LegendaryOS project &mdash; oparty na fedorze linux</p>
-      <span class="version-badge">v0.0.1</span>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
-</body>
+      <section id="download" class="download"><div class="section-shell"><div class="download-header reveal"><p class="eyebrow">04 / POBIERANIE</p><h2>Twoja legenda<br /><em>zaczyna się tutaj.</em></h2><p>Obrazy LegendaryOS są obecnie przygotowywane. Wybierz edycję, aby śledzić jej premierę.</p></div><div class="download-grid reveal">
+          <button class="download-card" data-edition="Phones"><span>01</span><b>LegendaryOS Phones</b><small>ARM64 · Blue Environment</small><i>WKRÓTCE</i></button>
+          <button class="download-card featured" data-edition="Classic"><span>02</span><b>LegendaryOS Classic</b><small>Desktop · Blue Environment</small><i>WKRÓTCE</i></button>
+          <button class="download-card" data-edition="Fedora"><span>03</span><b>LegendaryOS Fedora</b><small>Fedora · Atomic option</small><i>WKRÓTCE</i></button>
+        </div><p id="download-message" class="download-message" aria-live="polite">Wybierz edycję, aby otrzymać status wydania.</p></div></section>
+    </main>
+    <footer><a class="brand" href="#top"><img src="https://raw.githubusercontent.com/LegendaryOS-Linux-System/LegendaryOS/cosmic/branding/logo.png" alt="" /><span>LEGENDARY<span>OS</span></span></a><p>Built from curiosity. Made to be legendary.</p><a href="/changelog/">Changelog ↗</a></footer>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>
