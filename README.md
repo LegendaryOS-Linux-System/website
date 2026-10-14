@@ -1,6 +1,16 @@
-# LegendaryOS Website
+# LegendaryOS website
 
-Lost? Visit the home page: https://legendaryos-linux-system.github.io/website/index.html or: https://legendaryos-linux-system.github.io/website/
+Statyczna strona promująca LegendaryOS, napisana obecnie w HTML, CSS i TypeScript.
 
-### Welcome on LegendaryOS immuntable linux distro based on fedora
+## Uruchomienie
 
+```bash
+npm install
+npm run dev
+```
+
+## Plan techniczny
+
+W przyszłości strona może zostać przepisana do HackerScript. Jest to szczegół implementacyjny — interfejs i doświadczenie użytkownika mają pozostać niezmienne.
+
+Logo jest ładowane bezpośrednio z gałęzi `cosmic` repozytorium LegendaryOS przez `raw.githubusercontent.com`.
