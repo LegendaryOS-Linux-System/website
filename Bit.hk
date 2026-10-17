@@ -1,12 +1,12 @@
 [package]
 -> name        => legendaryos-website
 -> version     => 0.2.0
--> description => Strona LegendaryOS napisana w HackerScript (use <mode:website>).
+-> description => Strona LegendaryOS napisana w HackerScript.
 -> license     => Apache-2.0
 -> lang        => hs
 
 [layout]
--> cmd => src
+-> cmd => cmd
 
 [commands]
 -> site
