@@ -1,1 +1,87 @@
+let LOGO = "https://raw.githubusercontent.com/LegendaryOS-Linux-System/LegendaryOS/main/branding/logo.png"
 
+!! Tworzy element `tag` w `parent`, z klasami `cls` ("" = bez klasy) i tekstem.
+fun mk(parent, tag: Str, cls: Str, text: Str) [
+    let e = child(parent, tag, text)
+    if cls != "" [
+        dom_attr(e, "class", cls)
+    ]
+    end e
+]
+
+!! Ustawia atrybut i zwraca element (wygodne w lancuchach).
+fun at(e, key: Str, value: Str) [
+    dom_attr(e, key, value)
+    end e
+]
+
+!! Doklada surowy wezel tekstowy (potrzebny przy mieszanej tresci: tekst + <br> + <em>).
+fun tn(parent, s: Str) [
+    dom_append(parent, document.createTextNode(s))
+]
+
+!! <a class=cls href=href>text</a>
+fun lnk(parent, cls: Str, href: Str, text: Str) [
+    let a = mk(parent, "a", cls, text)
+    dom_attr(a, "href", href)
+    end a
+]
+
+!! Naglowek w dwoch wierszach: "linia1<br><em>linia2</em>" (h1 / h2).
+fun heading2(parent, tag: Str, cls: Str, first: Str, second: Str) [
+    let h = mk(parent, tag, cls, "")
+    tn(h, first)
+    mk(h, "br", "", "")
+    mk(h, "em", "", second)
+    end h
+]
+
+!! Tekst ze strzalka: "tekst <span>strzalka</span>" (przyciski i linki).
+fun with_arrow(parent, cls: Str, href: Str, text: Str, arrow: Str) [
+    let a = lnk(parent, cls, href, "")
+    tn(a, text + " ")
+    mk(a, "span", "", arrow)
+    end a
+]
+
+!! Logo + nazwa marki (naglowek i stopka). `label` != "" ustawia aria-label.
+fun brand(parent, label: Str, alt: Str) [
+    let a = lnk(parent, "brand", "#top", "")
+    if label != "" [
+        dom_attr(a, "aria-label", label)
+    ]
+    let img = mk(a, "img", "", "")
+    dom_attr(img, "src", LOGO)
+    dom_attr(img, "alt", alt)
+    let name = mk(a, "span", "", "")
+    tn(name, "LEGENDARY")
+    mk(name, "span", "", "OS")
+    end a
+]
+
+!! ---------- <head> i wygladu strony (wszystko z kodu, bez plikow .html/.css) ----------
+
+!! <meta name=... content=...> w <head>
+fun head_meta(name: Str, content: Str) [
+    let m = dom_create("meta")
+    dom_attr(m, "name", name)
+    dom_attr(m, "content", content)
+    dom_append(document.head, m)
+]
+
+!! <link rel=... href=...> w <head> ("" w `kind` = bez atrybutu type)
+fun head_link(rel: Str, href: Str, kind: Str) [
+    let l = dom_create("link")
+    dom_attr(l, "rel", rel)
+    dom_attr(l, "href", href)
+    if kind != "" [
+        dom_attr(l, "type", kind)
+    ]
+    dom_append(document.head, l)
+]
+
+!! Kompilator (mode:website) generuje szkielet z domyslnym stylem kontenera #app
+!! (waski, wysrodkowany); ta strona jest pelnoekranowa, wiec go zerujemy.
+fun reset_app_shell() [
+    page_css("#app { max-width: none; margin: 0; padding: 0; }")
+]
