@@ -1,4 +1,16 @@
-name: Build and deploy LegendaryOS website
+name: Build and deploy LegendaryOS website (HackerScript)
+
+# Strona jest napisana w HackerScript (`use <mode:website>`, src/*.hcs).
+# Budowanie:
+#   1. pobieramy binarke `bit`      (menedzer pakietow / runner komend z Bit.hk),
+#   2. pobieramy binarke `hackerc`  (kompilator HackerScript),
+#   3. `bit site` uruchamia scripts/build-site.sh -> dist/.
+#
+# UWAGA o `hackerc`: scripts/get-hackerc.sh probuje HACKERC_URL, ale sprawdza,
+# czy binarka naprawde umie `use <mode:website>`. Release v0.4 tego nie umie,
+# a v0.5 pod tym adresem na razie nie istnieje (404) - wtedy kompilator jest
+# budowany ze zrodel HackerScript (stage0 v0.4 -> cargo). Gdy v0.5 sie pojawi,
+# workflow zacznie z niego korzystac bez zadnych zmian.
 
 on:
   push:
@@ -14,6 +26,10 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
+env:
+  BIT_URL: https://github.com/HackerOS-Linux-System/bit/releases/download/v0.2/bit
+  HACKERC_URL: https://github.com/HackerOS-Linux-System/HackerScript/releases/download/v0.5/hackerc
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,16 +37,46 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Download bit
+        run: |
+          set -euo pipefail
+          mkdir -p .tools
+          curl -L --fail --silent --show-error -o .tools/bit "$BIT_URL"
+          chmod +x .tools/bit
+          .tools/bit --version
+
+      # klucz cache = aktualny commit HackerScript, wiec zbudowany ze zrodel
+      # hackerc nie jest kompilowany przy kazdym pushu
+      - name: Resolve HackerScript revision
+        id: hs
+        run: echo "sha=$(git ls-remote https://github.com/HackerOS-Linux-System/HackerScript HEAD | cut -f1)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache hackerc
+        uses: actions/cache@v4
         with:
-          node-version: 22
+          path: .tools/hackerc
+          key: hackerc-${{ steps.hs.outputs.sha }}-${{ hashFiles('scripts/get-hackerc.sh') }}
 
-      - name: Install dependencies
-        run: npm install
+      - name: Get hackerc
+        run: bash scripts/get-hackerc.sh .tools
 
-      - name: Build website
-        run: npm run build
+      - name: Build website (bit site)
+        env:
+          BIT_HACKERC: ${{ github.workspace }}/.tools/hackerc
+        run: |
+          set -euo pipefail
+          export PATH="$PWD/.tools:$PATH"
+          bit site
+
+      - name: Sanity-check the build output
+        run: |
+          set -euo pipefail
+          for f in index.html app.js styles.css changelog/index.html changelog/app.js; do
+            test -s "dist/$f" || { echo "::error::missing dist/$f"; exit 1; }
+          done
+          grep -q 'href="styles.css"' dist/index.html
+          grep -q 'href="../styles.css"' dist/changelog/index.html
+          du -sh dist
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
