@@ -59,7 +59,7 @@ fun brand(parent, label: Str, alt: Str) [
     end a
 ]
 
-!! ---------- <head> i wygladu strony (wszystko z kodu, bez plikow .html/.css) ----------
+!! ---------- <head> (wszystko z kodu, bez pliku .html) ----------
 
 !! <meta name=... content=...> w <head>
 fun head_meta(name: Str, content: Str) [
@@ -78,10 +78,4 @@ fun head_link(rel: Str, href: Str, kind: Str) [
         dom_attr(l, "type", kind)
     ]
     dom_append(document.head, l)
-]
-
-!! Kompilator (mode:website) generuje szkielet z domyslnym stylem kontenera #app
-!! (waski, wysrodkowany); ta strona jest pelnoekranowa, wiec go zerujemy.
-fun reset_app_shell() [
-    page_css("#app { max-width: none; margin: 0; padding: 0; }")
 ]
