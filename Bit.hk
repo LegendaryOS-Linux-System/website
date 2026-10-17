@@ -1,18 +1,14 @@
-{
-  "name": "legendaryos-website",
-  "private": true,
-  "version": "0.1.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
-  },
-  "devDependencies": {
-    "prettier": "^3.5.3",
-    "typescript": "^5.7.3",
-    "vite": "^6.1.0"
-  }
-}
+[package]
+-> name        => legendaryos-website
+-> version     => 0.2.0
+-> description => Strona LegendaryOS napisana w HackerScript (use <mode:website>).
+-> license     => Apache-2.0
+-> lang        => hs
+
+[layout]
+-> cmd => src
+
+[commands]
+-> site
+--> run => bash scripts/build-site.sh dist
+--> description => Zbuduj strone (HackerScript -> index.html + app.js) do dist/
