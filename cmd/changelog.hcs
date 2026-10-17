@@ -8,8 +8,6 @@ include <styles>
 
 fun main() [
     page_title("Changelog — LegendaryOS")
-    apply_styles()
-    reset_app_shell()
     head_link("icon", LOGO, "image/png")
     let root = app_root()
 
