@@ -1,0 +1,348 @@
+use <mode:website>
+
+include <ui>
+include <styles>
+
+!! ---------------------------------------------------------------
+!! Strona glowna LegendaryOS - przepisana z HTML/CSS/TypeScript na
+!! HackerScript. Struktura (DOM) i style (src/styles.hcs) sa w calosci w HackerScript.
+!! ---------------------------------------------------------------
+
+struct Edition [
+    cls: Str,
+    index: Str,
+    shape: Str,
+    tag: Str,
+    title: Str,
+    desc: Str,
+    chips: List<Str>
+]
+
+!! ---------- Naglowek ----------
+
+fun build_header(root) [
+    let header = mk(root, "header", "site-header", "")
+    brand(header, "LegendaryOS — strona główna", "LegendaryOS")
+
+    let nav = at(mk(header, "nav", "", ""), "aria-label", "Główna nawigacja")
+    lnk(nav, "", "#editions", "Edycje")
+    lnk(nav, "", "#runtime", "Hacker Lang++")
+    lnk(nav, "", "#download", "Pobierz")
+    lnk(nav, "", "changelog/", "Changelog")
+
+    with_arrow(header, "nav-cta", "#download", "Pobierz OS", "↗")
+]
+
+!! ---------- Hero ----------
+
+fun hero_stat(parent, value: Str, label: Str) [
+    let d = mk(parent, "div", "", "")
+    mk(d, "dt", "", value)
+    mk(d, "dd", "", label)
+]
+
+fun build_hero(page) [
+    let hero = mk(page, "section", "hero section-shell", "")
+
+    let copy = mk(hero, "div", "hero-copy reveal", "")
+    let eyebrow = mk(copy, "p", "eyebrow", "")
+    mk(eyebrow, "span", "pulse", "")
+    tn(eyebrow, " NOWA LEGENDA W BUDOWIE")
+    heading2(copy, "h1", "", "Twój system.", "Twoja legenda.")
+    mk(copy, "p", "hero-text", "LegendaryOS to przyjazny Linux inspirowany ekosystemem HackerOS — dla ludzi, którzy wolą tworzyć, grać i odkrywać niż dopasowywać się do systemu.")
+
+    let actions = mk(copy, "div", "hero-actions", "")
+    with_arrow(actions, "button primary", "#download", "Zobacz wydania", "↓")
+    with_arrow(actions, "button quiet", "#editions", "Poznaj LegendaryOS", "→")
+
+    let stats = mk(copy, "dl", "hero-stats", "")
+    hero_stat(stats, "3", "główne edycje")
+    hero_stat(stats, "4", "języki ekosystemu")
+    hero_stat(stats, "∞", "możliwości")
+
+    let art = at(mk(hero, "div", "hero-art reveal", ""), "aria-label", "Logo LegendaryOS")
+    mk(art, "div", "orbit orbit-one", "")
+    mk(art, "div", "orbit orbit-two", "")
+    mk(art, "div", "logo-glow", "")
+    let img = mk(art, "img", "", "")
+    dom_attr(img, "src", LOGO)
+    dom_attr(img, "alt", "Fioletowo-niebieski feniks LegendaryOS")
+    mk(art, "p", "", "RISE BEYOND ORDINARY")
+]
+
+!! ---------- Ticker ----------
+
+fun build_ticker(page) [
+    let ticker = at(mk(page, "section", "ticker", ""), "aria-label", "Cechy LegendaryOS")
+    let strip = mk(ticker, "div", "", "")
+    let items = ["BLUE ENVIRONMENT", "OPEN ECOSYSTEM", "ARM64 READY", "FEDORA POWERED", "BLUE ENVIRONMENT", "OPEN ECOSYSTEM"]
+    let first = true
+    for item in items [
+        if first [
+            tn(strip, item + " ")
+            first = false
+        ] else [
+            tn(strip, " " + item + " ")
+        ]
+        mk(strip, "b", "", "✦")
+    ]
+]
+
+!! ---------- Edycje ----------
+
+fun build_edition(grid, e: Edition) [
+    let card = mk(grid, "article", "edition-card " + e.cls + " reveal", "")
+    mk(card, "span", "card-index", e.index)
+    mk(card, "div", "device-shape " + e.shape, "")
+    mk(card, "p", "card-tag", e.tag)
+    mk(card, "h3", "", e.title)
+    mk(card, "p", "", e.desc)
+    let ul = mk(card, "ul", "", "")
+    for chip in e.chips [
+        mk(ul, "li", "", chip)
+    ]
+    with_arrow(card, "", "#download", "Poznaj " + e.title, "→")
+]
+
+fun build_editions(page) [
+    let sec = mk(page, "section", "editions section-shell", "")
+    dom_attr(sec, "id", "editions")
+
+    let head = mk(sec, "div", "section-heading reveal", "")
+    mk(head, "p", "eyebrow", "01 / EDYCJE")
+    heading2(head, "h2", "", "Jeden duch.", "Trzy ścieżki.")
+    mk(head, "p", "", "Wybierz system, który pasuje do Twojego sprzętu i sposobu pracy.")
+
+    let grid = mk(sec, "div", "edition-grid", "")
+    build_edition(grid, Edition("phones", "01", "phone-shape", "ARM64 / MOBILE", "Phones", "LegendaryOS na telefony i urządzenia ARM64. Natywne doświadczenie z Blue Environment — lekkie, wizualne, Twoje.", ["ARM64", "Blue Environment", "Warianty mobilne"]))
+    build_edition(grid, Edition("classic", "02", "desktop-shape", "DESKTOP / DAILY", "Classic", "Klasyczna edycja LegendaryOS: prosty, dopracowany Linux do codziennej pracy, rozrywki i tworzenia.", ["Blue Environment", "Desktop ready", "Ekosystem LegendaryOS"]))
+    build_edition(grid, Edition("fedora", "03", "cube-shape", "FEDORA / ATOMIC", "Fedora", "LegendaryOS na bazie Fedory — w zwykłej lub atomowej, niezmiennej odsłonie. Nowoczesność bez kompromisów.", ["Fedora base", "Atomic option", "Immutable ready"]))
+]
+
+!! ---------- Blue Environment ----------
+
+fun build_blue(page) [
+    let sec = mk(page, "section", "blue-environment", "")
+    let inner = mk(sec, "div", "section-shell blue-inner reveal", "")
+
+    let lead = mk(inner, "div", "", "")
+    mk(lead, "p", "eyebrow", "BLUE ENVIRONMENT")
+    heading2(lead, "h2", "", "Domyślnie", "wyjątkowy.")
+
+    mk(inner, "p", "", "Blue Environment jest sercem LegendaryOS. Zamiast traktować je jak osobną edycję, stawiamy je w centrum każdego normalnego wydania — bo dobry interfejs nie powinien być dodatkiem.")
+
+    let pills = mk(inner, "div", "blue-pills", "")
+    mk(pills, "span", "", "cosmic UI")
+    mk(pills, "span", "", "pixel spirit")
+    mk(pills, "span", "", "made for flow")
+]
+
+!! ---------- Runtime: Hacker Lang++ ----------
+
+!! Numer linii w terminalu: <i>NN</i>
+fun line_no(code, n: Str) [
+    mk(code, "i", "", n)
+]
+
+fun build_runtime(page) [
+    let sec = mk(page, "section", "runtime section-shell", "")
+    dom_attr(sec, "id", "runtime")
+
+    let term = mk(sec, "div", "runtime-terminal reveal", "")
+    let bar = mk(term, "div", "terminal-bar", "")
+    mk(bar, "span", "", "")
+    mk(bar, "span", "", "")
+    mk(bar, "span", "", "")
+    mk(bar, "b", "", "legendary@runtime:~")
+
+    let pre = mk(term, "pre", "", "")
+    let code = mk(pre, "code", "", "")
+
+    line_no(code, "01")
+    tn(code, " ")
+    mk(code, "span", "purple", "runtime")
+    tn(code, " HackerLang++ {\n")
+
+    line_no(code, "02")
+    tn(code, "   ")
+    mk(code, "span", "blue", "compatibility")
+    tn(code, ": ")
+    mk(code, "span", "green", "\"100% Hacker Lang\"")
+    tn(code, ";\n")
+
+    line_no(code, "03")
+    tn(code, "   ")
+    mk(code, "span", "blue", "targets")
+    tn(code, ": [everywhere];\n")
+
+    line_no(code, "04")
+    tn(code, "   ")
+    mk(code, "span", "blue", "syntax")
+    tn(code, ": extended;\n")
+
+    line_no(code, "05")
+    tn(code, " }\n")
+
+    line_no(code, "06")
+    tn(code, "\n")
+
+    line_no(code, "07")
+    tn(code, " ")
+    mk(code, "span", "comment", "// build legendary things.")
+
+    let copy = mk(sec, "div", "runtime-copy reveal", "")
+    mk(copy, "p", "eyebrow", "02 / RUNTIME")
+    let h2 = mk(copy, "h2", "", "")
+    tn(h2, "Hacker Lang")
+    mk(h2, "span", "", "++")
+    mk(copy, "p", "", "Własny runtime LegendaryOS, który działa wszędzie i pod różnymi postaciami. W pełni wspiera składnię Hacker Lang, a jednocześnie rozszerza ją o nowe możliwości.")
+
+    let list = mk(copy, "ul", "feature-list", "")
+    feature(list, "100%", "zgodności z Hacker Lang")
+    feature(list, "+", "rozszerzona składnia")
+    feature(list, "⌘", "jeden runtime, wiele miejsc")
+]
+
+fun feature(list, mark: Str, text: Str) [
+    let li = mk(list, "li", "", "")
+    mk(li, "b", "", mark)
+    mk(li, "span", "", text)
+]
+
+!! ---------- Ekosystem ----------
+
+fun language(list, n: Str, name: Str, note: Str) [
+    let row = mk(list, "div", "", "")
+    mk(row, "span", "", n)
+    mk(row, "strong", "", name)
+    mk(row, "small", "", note)
+]
+
+fun build_ecosystem(page) [
+    let sec = mk(page, "section", "ecosystem section-shell", "")
+
+    let head = mk(sec, "div", "section-heading reveal", "")
+    mk(head, "p", "eyebrow", "03 / EKOSYSTEM")
+    heading2(head, "h2", "", "Tworzone w języku", "otwartych możliwości.")
+
+    let list = mk(sec, "div", "language-list reveal", "")
+    language(list, "01", "Lua", "lekkość i skrypty")
+    language(list, "02", "Hacker Lang", "rdzeń doświadczenia")
+    language(list, "03", "H#", "wydajność i narzędzia")
+    language(list, "04", "HackerScript", "przyszłość platformy")
+]
+
+!! ---------- Pobieranie ----------
+
+!! Komunikat statusu po kliknieciu karty edycji.
+fun show_status(edition: Str) [
+    dom_text(dom_get("download-message"), edition + ": obraz instalacyjny jest jeszcze w przygotowaniu. Śledź changelog, aby poznać datę premiery.")
+]
+
+!! Obsluga zdarzen w trybie website dostaje funkcje po nazwie (bez argumentow),
+!! wiec kazda karta ma swoj malutki handler.
+fun on_phones() [
+    show_status("Phones")
+]
+
+fun on_classic() [
+    show_status("Classic")
+]
+
+fun on_fedora() [
+    show_status("Fedora")
+]
+
+fun download_card(grid, cls: Str, edition: Str, n: Str, title: Str, sub: Str) [
+    let card = mk(grid, "button", cls, "")
+    dom_attr(card, "data-edition", edition)
+    mk(card, "span", "", n)
+    mk(card, "b", "", title)
+    mk(card, "small", "", sub)
+    mk(card, "i", "", "WKRÓTCE")
+    if edition == "Phones" [
+        dom_on(card, "click", on_phones)
+    ] elif edition == "Classic" [
+        dom_on(card, "click", on_classic)
+    ] else [
+        dom_on(card, "click", on_fedora)
+    ]
+]
+
+fun build_download(page) [
+    let sec = mk(page, "section", "download", "")
+    dom_attr(sec, "id", "download")
+    let shell = mk(sec, "div", "section-shell", "")
+
+    let head = mk(shell, "div", "download-header reveal", "")
+    mk(head, "p", "eyebrow", "04 / POBIERANIE")
+    heading2(head, "h2", "", "Twoja legenda", "zaczyna się tutaj.")
+    mk(head, "p", "", "Obrazy LegendaryOS są obecnie przygotowywane. Wybierz edycję, aby śledzić jej premierę.")
+
+    let grid = mk(shell, "div", "download-grid reveal", "")
+    download_card(grid, "download-card", "Phones", "01", "LegendaryOS Phones", "ARM64 · Blue Environment")
+    download_card(grid, "download-card featured", "Classic", "02", "LegendaryOS Classic", "Desktop · Blue Environment")
+    download_card(grid, "download-card", "Fedora", "03", "LegendaryOS Fedora", "Fedora · Atomic option")
+
+    let msg = mk(shell, "p", "download-message", "Wybierz edycję, aby otrzymać status wydania.")
+    dom_attr(msg, "id", "download-message")
+    dom_attr(msg, "aria-live", "polite")
+]
+
+!! ---------- Stopka ----------
+
+fun build_footer(root) [
+    let footer = mk(root, "footer", "", "")
+    brand(footer, "", "")
+    mk(footer, "p", "", "Built from curiosity. Made to be legendary.")
+    lnk(footer, "", "changelog/", "Changelog ↗")
+]
+
+!! ---------- Animacja "reveal" (zastepuje IntersectionObserver) ----------
+!! Element dostaje klase `visible`, gdy widoczne jest >= 12% jego wysokosci
+!! (ten sam prog co w oryginale) - i zostaje widoczny juz na zawsze.
+
+fun reveal_check() [
+    let vh = window.innerHeight
+    let pending = document.querySelectorAll(".reveal:not(.visible)")
+    for e in pending [
+        let r = e.getBoundingClientRect()
+        let margin = r.height * 0.12
+        if r.top < vh - margin and r.bottom > margin [
+            e.classList.add("visible")
+        ]
+    ]
+]
+
+fun main() [
+    page_title("LegendaryOS — make your system legendary")
+    apply_styles()
+    reset_app_shell()
+    head_meta("theme-color", "#090311")
+    head_meta("description", "LegendaryOS — system Linux dla codzienności, telefonów i otwartych technologii.")
+    head_link("preconnect", "https://raw.githubusercontent.com", "")
+    head_link("icon", LOGO, "image/png")
+    let root = app_root()
+
+    at(mk(root, "div", "noise", ""), "aria-hidden", "true")
+    at(mk(root, "div", "stars", ""), "aria-hidden", "true")
+
+    build_header(root)
+
+    let page = at(mk(root, "main", "", ""), "id", "top")
+    build_hero(page)
+    build_ticker(page)
+    build_editions(page)
+    build_blue(page)
+    build_runtime(page)
+    build_ecosystem(page)
+    build_download(page)
+
+    build_footer(root)
+
+    dom_on(window, "scroll", reveal_check)
+    dom_on(window, "resize", reveal_check)
+    dom_on(window, "load", reveal_check)
+    reveal_check()
+    set_timeout(reveal_check, 250)
+]
