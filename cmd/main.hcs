@@ -316,8 +316,6 @@ fun reveal_check() [
 
 fun main() [
     page_title("LegendaryOS — make your system legendary")
-    apply_styles()
-    reset_app_shell()
     head_meta("theme-color", "#090311")
     head_meta("description", "LegendaryOS — system Linux dla codzienności, telefonów i otwartych technologii.")
     head_link("preconnect", "https://raw.githubusercontent.com", "")
