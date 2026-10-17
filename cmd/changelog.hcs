@@ -1,0 +1,23 @@
+use <mode:website>
+
+include <ui>
+include <styles>
+
+!! Podstrona /changelog/ - osobne wejscie, bo tryb website generuje jedna
+!! strone (index.html + app.js) na jeden plik wejsciowy.
+
+fun main() [
+    page_title("Changelog — LegendaryOS")
+    apply_styles()
+    reset_app_shell()
+    head_link("icon", LOGO, "image/png")
+    let root = app_root()
+
+    let page = at(mk(root, "main", "section-shell", ""), "style", "min-height: 80vh; padding-top: 12rem")
+    mk(page, "p", "eyebrow", "LEGENDARYOS / CHANGELOG")
+    heading2(page, "h1", "", "Historia", "nadchodzi.")
+    mk(page, "p", "hero-text", "To miejsce będzie zawierać informacje o nowych wydaniach LegendaryOS, poprawkach i zmianach w ekosystemie.")
+
+    let back = mk(page, "p", "", "")
+    lnk(back, "button primary", "../", "← Wróć na stronę główną")
+]
