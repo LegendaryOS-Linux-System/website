@@ -7,50 +7,6 @@ name: Build and deploy LegendaryOS website (HackerScript)
 #   3. `bit site` uruchamia scripts/build-site.sh -> dist/.
 #
 # UWAGA o `hackerc`: scripts/get-hackerc.sh probuje HACKERC_URL, ale sprawdza,
-# czy binarka naprawde umie `use <mode:website>`. Release v0.4 tego nie umie,
-# a v0.5 pod tym adresem na razie nie istnieje (404) - wtedy kompilator jest
-# budowany ze zrodel HackerScript (stage0 v0.4 -> cargo). Gdy v0.5 sie pojawi,
-# workflow zacznie z niego korzystac bez zadnych zmian.
-
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
-env:
-  BIT_URL: https://github.com/HackerOS-Linux-System/bit/releases/download/v0.2/bit
-  HACKERC_URL: https://github.com/HackerOS-Linux-System/HackerScript/releases/download/v0.5/hackerc
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download bit
-        run: |
-          set -euo pipefail
-          mkdir -p .tools
-          curl -L --fail --silent --show-error -o .tools/bit "$BIT_URL"
-name: Build and deploy LegendaryOS website (HackerScript)
-
-# Strona jest napisana w HackerScript (`use <mode:website>`, src/*.hcs).
-# Budowanie:
-#   1. pobieramy binarke `bit`      (menedzer pakietow / runner komend z Bit.hk),
-#   2. pobieramy binarke `hackerc`  (kompilator HackerScript),
-#   3. `bit site` uruchamia scripts/build-site.sh -> dist/.
-#
-# UWAGA o `hackerc`: scripts/get-hackerc.sh probuje HACKERC_URL, ale sprawdza,
 # czy binarka naprawde umie `use <mode:website>` i bloki `style { }`. Release
 # v0.4 tego nie umie, a v0.5 pod tym adresem na razie nie istnieje (404) - wtedy
 # kompilator jest budowany ze zrodel HackerScript (stage0 v0.4 -> cargo); zrodla
@@ -123,28 +79,6 @@ jobs:
           grep -q 'Space Grotesk' dist/index.html
           grep -q 'Space Grotesk' dist/changelog/index.html
           ! grep -q 'rel="stylesheet"' dist/index.html
-          du -sh dist
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4 done
-          grep -q 'href="styles.css"' dist/index.html
-          grep -q 'href="../styles.css"' dist/changelog/index.html
           du -sh dist
 
       - name: Configure Pages
